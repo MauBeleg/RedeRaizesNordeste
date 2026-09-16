@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RaizesNordeste.Api/RaizesNordeste.Api.csproj" />
+    <Project Path="src/RaizesNordeste.Application/RaizesNordeste.Application.csproj" />
+    <Project Path="src/RaizesNordeste.Domain/RaizesNordeste.Domain.csproj" />
+    <Project Path="src/RaizesNordeste.Infrastructure/RaizesNordeste.Infrastructure.csproj" />
+  </Folder>
+</Solution>
