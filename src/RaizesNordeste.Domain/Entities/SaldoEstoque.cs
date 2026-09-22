@@ -9,8 +9,8 @@ namespace RaizesNordeste.Domain.Entities
         public Estoque Estoque { get; set; } = null!;
         public long ItemInventarioId { get; set; }
         public ItemInventario ItemInventario { get; set; } = null!;
-        public decimal Quantidade { get; set; }
-        public decimal QuantidadeReservada { get; set; }
+        public int Quantidade { get; set; }
+        public int QuantidadeReservada { get; set; }
         public long CriadoPor {  get; set; }
         public Usuario UsuarioCriador { get; set; } = null!;
         public DateTime DataCriacao { get; set; }

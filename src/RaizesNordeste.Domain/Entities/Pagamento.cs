@@ -10,7 +10,7 @@ namespace RaizesNordeste.Domain.Entities
         public StatusPagamento Status { get; set; }
         public string FormaPagamento { get; set; } = string.Empty;
         public decimal Valor { get; set; }
-        public string? IdentificadorExterno {  get; set; } = string.Empty;
+        public string? IdentificadorExterno {  get; set; }
         public long CriadoPor {  get; set; }
         public Usuario UsuarioCriador { get; set; } = null!;
         public DateTime DataCriacao { get; set; }

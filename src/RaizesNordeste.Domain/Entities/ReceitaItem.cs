@@ -9,7 +9,7 @@ namespace RaizesNordeste.Domain.Entities
         public Receita Receita { get; set; } = null!;
         public long ItemInventarioId { get; set; }
         public ItemInventario ItemInventario { get; set; } = null!;
-        public decimal Quantidade { get; set; }
+        public int Quantidade { get; set; }
         public long CriadoPor {  get; set; }
         public Usuario UsuarioCriador { get; set; } = null!;
         public DateTime DataCriacao { get; set; }

@@ -6,7 +6,7 @@ namespace RaizesNordeste.Domain.Entities
         public long Id { get; set; }
         public string Nome { get; set; } = string.Empty;
         public int PontosNecessarios { get; set; }
-        public decimal PercentualDesconto { get; set; }
+        public int PercentualDesconto { get; set; }
         public bool Ativo {  get; set; }
         public long CriadoPor {  get; set; }
         public Usuario UsuarioCriador { get; set; } = null!;
