@@ -1,4 +1,6 @@
 ﻿
+using RaizesNordeste.Domain.Enums;
+
 namespace RaizesNordeste.Domain.Entities
 {
     public class Usuario
@@ -15,6 +17,7 @@ namespace RaizesNordeste.Domain.Entities
         public long? CriadoPor {  get; set; }
         public Usuario? UsuarioCriador { get; set; }
         public DateTime DataCriacao { get; set; }
+        public SetorFuncionario? Setor {  get; set; }
         public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
         public ICollection<Consentimento> Consentimentos { get; set; } = new List<Consentimento>();
         public ICollection<PontosCliente> PontosClientes { get; set; } = new List<PontosCliente>();
