@@ -2,6 +2,7 @@
 using RaizesNordeste.Api.DTOs;
 using RaizesNordeste.Application.Servicos;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RaizesNordeste.Api.Controllers
 {
@@ -15,7 +16,6 @@ namespace RaizesNordeste.Api.Controllers
         {
             _usuarioService = usuarioService;
         }
-
 
         [HttpPost]
         public async Task<IActionResult> CriarCliente(

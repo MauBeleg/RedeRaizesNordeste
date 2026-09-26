@@ -1,5 +1,6 @@
-@RaizesNordeste.Api_HostAddress = http://localhost:5216
+@RaizesNordeste.Api_HostAddress = https://localhost:7111
 
+//Teste de criacao de cliente
 POST {{RaizesNordeste.Api_HostAddress}}/api/usuarios
 Content-Type: application/json
 
@@ -9,3 +10,26 @@ Content-Type: application/json
   "senha": "Teste@123"
 }
 ###
+
+//Teste de criacao de cliente 2
+POST {{RaizesNordeste.Api_HostAddress}}/api/usuarios
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiY2xpZW50ZS50ZXN0ZUByYWl6ZXMubG9jYWwiLCJQZXJmaWxJZCI6IjMiLCJleHAiOjE3OTA0NjQ2MzYsImlzcyI6IlJhaXplc05vcmRlc3RlLkFwaSIsImF1ZCI6IlJhaXplc05vcmRlc3RlLkNsaWVudCJ9.SSHvXCO1QhdFnN4bxhmvTGJb2TeaYpRcjNAv-LNjrIg
+Content-Type: application/json
+
+{
+  "nome": "Cliente Teste2",
+  "email": "cliente.teste@raizes2.local",
+  "senha": "Teste2@123"
+}
+###
+
+//Teste de login
+###
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "cliente.teste@raizes.local",
+  "senha": "Teste@123"
+}

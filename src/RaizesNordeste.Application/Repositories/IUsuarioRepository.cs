@@ -15,6 +15,8 @@ namespace RaizesNordeste.Application.Repositories
          Task CreateUsuario(Usuario usuario);
 
 
+        Task<Usuario?> BuscarUsuarioPorEmail(string email);
+
 
     }
 }

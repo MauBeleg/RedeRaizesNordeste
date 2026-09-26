@@ -5,8 +5,8 @@ using RaizesNordeste.Application.Security;
 using RaizesNordeste.Application.Servicos;
 using RaizesNordeste.Infrastructure.Repositories;
 using RaizesNordeste.Infrastructure.Security;
-
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 
 
@@ -19,10 +19,38 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql
 
 
 builder.Services.AddControllers();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
+    var chaveJwt = builder.Configuration["Jwt:Chave"];
+    var issuer = builder.Configuration["Jwt:Issuer"];
+    var audience = builder.Configuration["Jwt:Audience"];
 
+    var chave = new SymmetricSecurityKey(
+    Convert.FromBase64String(chaveJwt!)
+    );
+
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+
+        ValidIssuer = issuer,
+        ValidAudience = audience,
+        IssuerSigningKey = chave
+    };
+
+});
+
+builder.Services.AddAuthorization();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ISenhaHasher, SenhaHasher>();
 builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
 var app = builder.Build();
 
@@ -33,6 +61,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
