@@ -13,7 +13,7 @@ Content-Type: application/json
 
 //Teste de criacao de cliente 2
 POST {{RaizesNordeste.Api_HostAddress}}/api/usuarios
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiY2xpZW50ZS50ZXN0ZUByYWl6ZXMubG9jYWwiLCJQZXJmaWxJZCI6IjMiLCJleHAiOjE3OTA0NjQ2MzYsImlzcyI6IlJhaXplc05vcmRlc3RlLkFwaSIsImF1ZCI6IlJhaXplc05vcmRlc3RlLkNsaWVudCJ9.SSHvXCO1QhdFnN4bxhmvTGJb2TeaYpRcjNAv-LNjrIg
+Authorization: Bearer 
 Content-Type: application/json
 
 {
@@ -71,3 +71,35 @@ Authorization: Bearer
 //Buscar usuário inexistente como ADMIN
 GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios/999999
 Authorization: Bearer 
+
+###
+
+### Listar unidades ativas
+GET {{RaizesNordeste.Api_HostAddress}}/api/unidades
+Accept: application/json
+
+###
+
+### Buscar unidade por ID
+GET {{RaizesNordeste.Api_HostAddress}}/api/unidades/1
+Accept: application/json
+
+###
+
+### Buscar unidade inexistente - esperado: 404
+GET {{RaizesNordeste.Api_HostAddress}}/api/unidades/999999
+Accept: application/json
+
+###
+
+### Buscar cardápio da unidade
+GET {{RaizesNordeste.Api_HostAddress}}/api/unidades/1/cardapio
+Accept: application/json
+
+###
+
+### Buscar cardápio de unidade inexistente - esperado: 404
+GET {{RaizesNordeste.Api_HostAddress}}/api/unidades/999999/cardapio
+Accept: application/json
+
+###

@@ -49,6 +49,10 @@ builder.Services.AddScoped<ISenhaHasher, SenhaHasher>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUnidadeRepository, UnidadeRepository>();
+builder.Services.AddScoped<UnidadeService>();
+builder.Services.AddScoped<ICardapioRepository, CardapioRepository>();
+builder.Services.AddScoped<CardapioService>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 

@@ -24,7 +24,7 @@ namespace RaizesNordeste.Application.Servicos
             _tokenService = tokenService;
         }
             
-        public async Task<string> Login (string email, string senha)
+        public async Task<string?> Login (string email, string senha)
         {
             var usuario = await _usuarioRepository.BuscarUsuarioPorEmail(email);
 
