@@ -27,6 +27,18 @@ namespace RaizesNordeste.Infrastructure.Security
             claims.Add(new Claim(ClaimTypes.Email, usuario.Email));
             claims.Add(new Claim("PerfilId", usuario.PerfilId.ToString()));
 
+            var role = usuario.PerfilId switch
+            {
+                1 => "SISTEMA",
+                2 => "ADMIN",
+                3 => "FUNCIONARIO",
+                4 => "CLIENTE",
+                _ => "DESCONHECIDO"
+            };
+
+
+            claims.Add(new Claim(ClaimTypes.Role, role));
+
             var chave = new SymmetricSecurityKey(Convert.FromBase64String(_settings.Chave));
             var credenciais = new SigningCredentials(chave, SecurityAlgorithms.HmacSha256);
 

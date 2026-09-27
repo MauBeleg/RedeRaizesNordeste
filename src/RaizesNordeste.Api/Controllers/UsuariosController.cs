@@ -17,6 +17,8 @@ namespace RaizesNordeste.Api.Controllers
             _usuarioService = usuarioService;
         }
 
+
+        //Criar cliente
         [HttpPost]
         public async Task<IActionResult> CriarCliente(
             [FromBody] CriarUsuarioDTO dto)
@@ -34,5 +36,58 @@ namespace RaizesNordeste.Api.Controllers
         }
 
 
+
+        // Buscar usuarios
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet]
+        public async Task<IActionResult> BuscarUsuarios()
+        {
+            var usuarios = await _usuarioService.BuscarUsuarios();
+
+
+            var usuariosDTO = usuarios.Select(usuario => new  UsuarioDTO
+            {
+                Id = usuario.Id,
+                Nome = usuario.Nome,
+                Email = usuario.Email,
+                PerfilId = usuario.PerfilId,
+                UnidadeId = usuario.UnidadeId,
+                Setor = usuario.Setor,
+                Ativo = usuario.Ativo,
+                DataCriacao = usuario.DataCriacao
+            }).ToList();
+
+
+            return Ok(usuariosDTO);
+
+        }
+
+        //Buscar usuario peo id
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet("{id:long}")]
+        public async Task<IActionResult> BuscarUsuarioPorId (long id)
+        {
+            var usuario = await _usuarioService.BuscarUsuarioPorId(id);
+             if (usuario == null)
+            {
+                return NotFound("Usuário não encontrado");
+            }
+
+            UsuarioDTO usuarioDTO = new UsuarioDTO()
+            {
+                Id = usuario.Id,
+                Nome = usuario.Nome,
+                Email = usuario.Email,
+                PerfilId = usuario.PerfilId,
+                UnidadeId = usuario.UnidadeId,
+                Setor = usuario.Setor,
+                Ativo = usuario.Ativo,
+                DataCriacao = usuario.DataCriacao
+            };
+
+
+
+            return Ok(usuarioDTO);
+        }
     }
 }

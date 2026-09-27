@@ -36,7 +36,7 @@ namespace RaizesNordeste.Application.Servicos
                 Nome = nome,
                 Email = email,
                 SenhaHash = _senhaHasher.GerarHash(senha),
-                PerfilId = 3,
+                PerfilId = 4,
                 Ativo = true
             };
 
@@ -47,5 +47,20 @@ namespace RaizesNordeste.Application.Servicos
 
         }
 
+
+
+
+        //metodos para buscar usuarios
+        public async Task<List<Usuario>> BuscarUsuarios()
+        {
+            return await _usuarioRepository.BuscarUsuarios();
+        }
+
+
+        //metodo para buscar usuario pelo id
+        public async Task<Usuario?> BuscarUsuarioPorId(long id)
+        {
+            return await _usuarioRepository.BuscarUsuarioPorId(id);
+        }
     }
 }

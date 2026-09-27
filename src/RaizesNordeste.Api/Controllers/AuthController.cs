@@ -17,7 +17,7 @@ namespace RaizesNordeste.Api.Controllers
     
     
         [HttpPost("login")]
-        public async Task<IActionResult> CriarCliente(
+        public async Task<IActionResult> Login(
             [FromBody] LoginDTO dto)
         {
             var token = await _authService.Login(dto.Email, dto.Senha);

@@ -17,6 +17,10 @@ namespace RaizesNordeste.Application.Repositories
 
         Task<Usuario?> BuscarUsuarioPorEmail(string email);
 
+        Task<List<Usuario>> BuscarUsuarios();
+
+        Task<Usuario?> BuscarUsuarioPorId (long  id);
+
 
     }
 }

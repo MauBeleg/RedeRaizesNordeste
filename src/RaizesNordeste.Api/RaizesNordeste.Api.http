@@ -33,3 +33,41 @@ Content-Type: application/json
   "email": "cliente.teste@raizes.local",
   "senha": "Teste@123"
 }
+
+
+###
+
+//Buscar usuários sem token
+GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios
+
+###
+
+// Buscar usuários como cliente
+GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios
+Authorization: Bearer 
+###
+
+//  Login ADMIN
+POST {{RaizesNordeste.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@raizes.local",
+  "senha": "Admin@123"
+}
+
+###
+
+// Buscar todos os usuários como ADMIN
+GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios
+Authorization: Bearer 
+###
+
+// Buscar usuário existente por ID como ADMIN
+GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios/5
+Authorization: Bearer 
+###
+
+//Buscar usuário inexistente como ADMIN
+GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios/999999
+Authorization: Bearer 

@@ -33,6 +33,16 @@ namespace RaizesNordeste.Infrastructure.Repositories
             return await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<List<Usuario>> BuscarUsuarios()
+        {
+            return await _context.Usuarios.ToListAsync();
+        }
+
+        public async Task<Usuario?> BuscarUsuarioPorId(long id)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(us => us.Id == id);
+        }
+
 
     }
 }
