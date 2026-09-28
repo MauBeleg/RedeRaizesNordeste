@@ -53,6 +53,8 @@ builder.Services.AddScoped<IUnidadeRepository, UnidadeRepository>();
 builder.Services.AddScoped<UnidadeService>();
 builder.Services.AddScoped<ICardapioRepository, CardapioRepository>();
 builder.Services.AddScoped<CardapioService>();
+builder.Services.AddScoped<IEstoqueRepository, EstoqueRepository>();
+builder.Services.AddScoped<EstoqueService>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
