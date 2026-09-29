@@ -7,6 +7,7 @@ using RaizesNordeste.Infrastructure.Repositories;
 using RaizesNordeste.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Serialization;
 
 
 
@@ -17,8 +18,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter()
+        );
+    });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
     var chaveJwt = builder.Configuration["Jwt:Chave"];
     var issuer = builder.Configuration["Jwt:Issuer"];
@@ -55,6 +61,7 @@ builder.Services.AddScoped<ICardapioRepository, CardapioRepository>();
 builder.Services.AddScoped<CardapioService>();
 builder.Services.AddScoped<IEstoqueRepository, EstoqueRepository>();
 builder.Services.AddScoped<EstoqueService>();
+builder.Services.AddScoped<PedidoService>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 

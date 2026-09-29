@@ -1,5 +1,11 @@
 @RaizesNordeste.Api_HostAddress = https://localhost:7111
+@tokenCliente = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiY2xpZW50ZS50ZXN0ZUByYWl6ZXMubG9jYWwiLCJQZXJmaWxJZCI6IjQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJDTElFTlRFIiwiZXhwIjoxNzkwNzE2MTI2LCJpc3MiOiJSYWl6ZXNOb3JkZXN0ZS5BcGkiLCJhdWQiOiJSYWl6ZXNOb3JkZXN0ZS5DbGllbnQifQ.e7-tKqu_4ppVxseh1JuUnw6FBiK4o2j3DXayGz-cfjw
+@tokenFuncionario = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiIzIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiZnVuY2lvbmFyaW9AcmFpemVzLmxvY2FsIiwiUGVyZmlsSWQiOiIzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRlVOQ0lPTkFSSU8iLCJleHAiOjE3OTA3MTY0MjEsImlzcyI6IlJhaXplc05vcmRlc3RlLkFwaSIsImF1ZCI6IlJhaXplc05vcmRlc3RlLkNsaWVudCJ9.JbwauIpsTaeb29wavTDUgsxYVA4T0O_dvQzS4yrY25A
+@clienteId = 5
 
+
+
+###
 //Teste de criacao de cliente
 POST {{RaizesNordeste.Api_HostAddress}}/api/usuarios
 Content-Type: application/json
@@ -34,6 +40,14 @@ Content-Type: application/json
   "senha": "Teste@123"
 }
 
+###
+POST {{RaizesNordeste.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "funcionario@raizes.local",
+  "senha": "Funcionario@123"
+}
 
 ###
 
@@ -60,7 +74,7 @@ Content-Type: application/json
 
 // Buscar todos os usuários como ADMIN
 GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios
-Authorization: Bearer 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiIyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiYWRtaW5AcmFpemVzLmxvY2FsIiwiUGVyZmlsSWQiOiIyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU4iLCJleHAiOjE3OTA3MTU3ODcsImlzcyI6IlJhaXplc05vcmRlc3RlLkFwaSIsImF1ZCI6IlJhaXplc05vcmRlc3RlLkNsaWVudCJ9.OO2P366UQ1XQgKyozDxc6h7nWt83usij0qLJoRwnMQE
 ###
 
 // Buscar usuário existente por ID como ADMIN
@@ -104,3 +118,295 @@ Accept: application/json
 
 ###
 
+
+### TESTE 1 - Criar pedido válido como CLIENTE
+POST https://localhost:7111/api/pedidos
+Content-Type: application/json
+Authorization: Bearer SEU_TOKEN_CLIENTE
+
+{
+  "clienteId": ID_DO_MESMO_CLIENTE_DO_TOKEN,
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1
+    }
+  ]
+}
+
+
+### VARIÁVEIS - TESTES DE PEDIDOS
+
+@tokenCliente = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiY2xpZW50ZS50ZXN0ZUByYWl6ZXMubG9jYWwiLCJQZXJmaWxJZCI6IjQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJDTElFTlRFIiwiZXhwIjoxNzkwNzE2MTI2LCJpc3MiOiJSYWl6ZXNOb3JkZXN0ZS5BcGkiLCJhdWQiOiJSYWl6ZXNOb3JkZXN0ZS5DbGllbnQifQ.e7-tKqu_4ppVxseh1JuUnw6FBiK4o2j3DXayGz-cfjw
+@tokenFuncionario = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiIzIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiZnVuY2lvbmFyaW9AcmFpemVzLmxvY2FsIiwiUGVyZmlsSWQiOiIzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRlVOQ0lPTkFSSU8iLCJleHAiOjE3OTA3MTY0MjEsImlzcyI6IlJhaXplc05vcmRlc3RlLkFwaSIsImF1ZCI6IlJhaXplc05vcmRlc3RlLkNsaWVudCJ9.JbwauIpsTaeb29wavTDUgsxYVA4T0O_dvQzS4yrY25A
+@clienteId = 5
+
+
+### TESTE 1 - Pedido válido como CLIENTE
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1
+    }
+  ]
+}
+
+
+### TESTE 2 - Pedido sem autenticação
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1
+    }
+  ]
+}
+
+### TESTE 3 - canalPedido não informado
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1
+    }
+  ]
+}
+
+
+### TESTE 4 - canalPedido inválido
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "Aviao",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1
+    }
+  ]
+}
+
+
+### TESTE 5 - Pedido sem itens
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": []
+}
+
+### TESTE 6 - Quantidade igual a zero
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 0
+    }
+  ]
+}
+
+
+### TESTE 7 - Produto inexistente
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 99999,
+      "quantidade": 1
+    }
+  ]
+}
+
+
+### TESTE 8 - Unidade inexistente
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 99999,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1
+    }
+  ]
+}
+
+
+### TESTE 9 - CLIENTE tentando criar pedido para OUTRO CLIENTE
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": 6,
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1
+    }
+  ]
+}
+
+### TESTE 10 - FUNCIONARIO criando pedido para CLIENTE
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenFuncionario}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "Balcao",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1
+    }
+  ]
+}
+
+
+### TESTE 11 - Estoque claramente insuficiente
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 999999
+    }
+  ]
+}
+
+
+### TESTE 12 - Pedido com múltiplos produtos
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1000
+    },
+    {
+      "produtoId": 4,
+      "quantidade": 1000
+    }
+  ]
+}
+
+
+### TESTE 13 - Mesmo produto repetido no pedido
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1000
+    },
+    {
+      "produtoId": 1,
+      "quantidade": 1
+    }
+  ]
+}
+
+
+### TESTE 14 - Consumo agregado do mesmo item de estoque
+
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos
+Content-Type: application/json
+Authorization: Bearer {{tokenCliente}}
+
+{
+  "clienteId": {{clienteId}},
+  "unidadeId": 1,
+  "canalPedido": "App",
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 40
+    },
+    {
+      "produtoId": 1,
+      "quantidade": 40
+    }
+  ]
+}
