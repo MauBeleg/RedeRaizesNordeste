@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RaizesNordeste.Api.DTOs;
-using RaizesNordeste.Application.Servicos;
-using RaizesNordeste.Application.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using RaizesNordeste.Api.DTOs;
+using RaizesNordeste.Application.Models;
+using RaizesNordeste.Application.Servicos;
+using RaizesNordeste.Domain.Entities;
 
 [ApiController]
 [Route("api/pedidos")]
@@ -67,7 +68,44 @@ public class PedidosController : ControllerBase
             return BadRequest(resultado.Mensagem);
         }
 
-        return Ok(resultado.Mensagem);
+
+        if (resultado.Objeto is not PedidoCriadoOutput pedidoOutput)
+        {
+            return StatusCode(500, "Não foi possível obter os dados do pedido criado");
+        }
+
+        var pedidoCriadoItensDTO = new List<PedidoItemRespostaDTO>();
+
+        foreach (var pedidoItem in pedidoOutput.Itens)
+        {
+            var pedidoItemRespostaDTO = new PedidoItemRespostaDTO
+            {
+                Produto = pedidoItem.Produto,
+                Quantidade = pedidoItem.Quantidade,
+                ValorUnitario  = pedidoItem.ValorUnitario,
+                ValorTotal = pedidoItem.ValorTotal
+            };
+
+            pedidoCriadoItensDTO.Add(pedidoItemRespostaDTO);
+
+        }
+
+        var pedidoCriadoDTO = new PedidoCriadoDTO
+        {
+            Id = pedidoOutput.Id,
+            Cliente = pedidoOutput.Cliente,
+            Unidade = pedidoOutput.Unidade,
+            CanalPedido = pedidoOutput.CanalPedido,
+            Subtotal = pedidoOutput.Subtotal,
+            Desconto = pedidoOutput.Desconto,
+            ValorTotal = pedidoOutput.ValorTotal,
+            Status = pedidoOutput.Status,
+            DataCriacao = pedidoOutput.DataCriacao,
+            Itens = pedidoCriadoItensDTO
+        };
+
+
+        return StatusCode(StatusCodes.Status201Created, pedidoCriadoDTO);
 
     }
 

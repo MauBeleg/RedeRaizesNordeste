@@ -1,5 +1,7 @@
 ﻿using RaizesNordeste.Application.Models;
 using RaizesNordeste.Application.Repositories;
+using RaizesNordeste.Domain.Entities;
+using RaizesNordeste.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,12 +14,17 @@ namespace RaizesNordeste.Application.Servicos
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IUnidadeRepository _unidadeRepository;
         private readonly EstoqueService _estoqueService;
+        private readonly IPedidoRepository _pedidoRepository;
+        private readonly IProdutoRepository _produtoRepository;
 
-        public PedidoService(IUsuarioRepository usuarioRepository, IUnidadeRepository unidadeRepository, EstoqueService estoqueService)
+        public PedidoService(IUsuarioRepository usuarioRepository, IUnidadeRepository unidadeRepository, EstoqueService estoqueService, 
+            IPedidoRepository pedidoRepository, IProdutoRepository produtoRepository)
         {
             _usuarioRepository = usuarioRepository;
             _unidadeRepository = unidadeRepository;
             _estoqueService = estoqueService;
+            _pedidoRepository = pedidoRepository;
+            _produtoRepository = produtoRepository;
         }
 
 
@@ -126,7 +133,76 @@ namespace RaizesNordeste.Application.Servicos
 
             }
 
-            var estoqueDisponivel = await _estoqueService.VerificarDisponibilidadePedido(unidade.Id, input.Itens);
+
+            var itensAgrupados = new Dictionary<long, int>();
+
+            foreach (var item in input.Itens)
+            {
+                if (itensAgrupados.ContainsKey(item.ProdutoId))
+                {
+                    itensAgrupados[item.ProdutoId] += item.Quantidade;
+                }
+                else
+                {
+                    itensAgrupados.Add(item.ProdutoId, item.Quantidade);
+                }
+            }
+
+            var itensNormalizados = new List<CriarPedidoItemInput>();
+
+            foreach (var item in itensAgrupados)
+            {
+                itensNormalizados.Add(new CriarPedidoItemInput
+                {
+                    ProdutoId = item.Key,
+                    Quantidade = item.Value
+                });
+            }
+
+            var pedidoItens = new List<PedidoItem>();
+            decimal subtotal = 0;
+            var pedidoItensOutput = new List<PedidoItemOutput>();
+
+            foreach (var item in itensAgrupados)
+            {
+                var produto = await _produtoRepository.BuscarProdutoPorId(item.Key);
+
+                if (produto == null)
+                {
+                    return new ResultadoOperacao
+                    {
+                        Resultado = false,
+                        Mensagem = "Produto inválido"
+                    };
+                }
+
+                var valorTotalItem = item.Value * produto.ValorUnitario;
+
+                var pedidoItem = new PedidoItem
+                {
+                    ProdutoId = item.Key,
+                    Quantidade = item.Value,
+                    ValorUnitario = produto.ValorUnitario,
+                    ValorTotal = valorTotalItem,
+                    CriadoPor = input.UsuarioAutenticadoId,
+                    DataCriacao = DateTime.UtcNow
+                };
+
+                var pedidoItemOutput = new PedidoItemOutput
+                {
+                    Produto = produto.Nome,
+                    Quantidade = item.Value,
+                    ValorUnitario = produto.ValorUnitario,
+                    ValorTotal = valorTotalItem
+                };
+
+                pedidoItensOutput.Add(pedidoItemOutput);
+                pedidoItens.Add(pedidoItem);
+                subtotal += valorTotalItem;
+
+            }
+
+            var estoqueDisponivel = await _estoqueService.VerificarDisponibilidadePedido(unidade.Id, itensNormalizados);
 
             if (!estoqueDisponivel)
             {
@@ -137,11 +213,47 @@ namespace RaizesNordeste.Application.Servicos
                 };
             }
 
+            decimal desconto = 0;
+
+            decimal valorTotal = subtotal - desconto;
+
+            var pedido = new Pedido
+            {
+                ClienteId = input.ClienteId,
+                UnidadeId = input.UnidadeId,
+                CanalPedido = input.CanalPedido,
+                Subtotal = subtotal,
+                Desconto = desconto,
+                ValorTotal = valorTotal,
+                Status = StatusPedido.AguardandoPagamento,
+                CriadoPor = usuarioAutenticado.Id,
+                DataCriacao = DateTime.UtcNow,
+                Itens = pedidoItens
+            };
+
+            await _pedidoRepository.SalvarPedido(pedido);
+
+
+            var pedidoCriadoOutput = new PedidoCriadoOutput
+            {
+                Id = pedido.Id,
+                Cliente = cliente.Nome,
+                Unidade = unidade.Nome,
+                CanalPedido = pedido.CanalPedido,
+                Subtotal = pedido.Subtotal,
+                Desconto = pedido.Desconto,
+                ValorTotal = pedido.ValorTotal,
+                Status = pedido.Status,
+                DataCriacao = pedido.DataCriacao,
+                Itens = pedidoItensOutput
+            };
+
 
             return new ResultadoOperacao
             {
                 Resultado = true,
-                Mensagem = "Pedido válido para criação"
+                Mensagem = $"Pedido criado com sucesso:",
+                Objeto = pedidoCriadoOutput
             };
 
         }

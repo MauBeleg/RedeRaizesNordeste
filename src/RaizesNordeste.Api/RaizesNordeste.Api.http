@@ -1,6 +1,7 @@
 @RaizesNordeste.Api_HostAddress = https://localhost:7111
-@tokenCliente = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiY2xpZW50ZS50ZXN0ZUByYWl6ZXMubG9jYWwiLCJQZXJmaWxJZCI6IjQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJDTElFTlRFIiwiZXhwIjoxNzkwNzE2MTI2LCJpc3MiOiJSYWl6ZXNOb3JkZXN0ZS5BcGkiLCJhdWQiOiJSYWl6ZXNOb3JkZXN0ZS5DbGllbnQifQ.e7-tKqu_4ppVxseh1JuUnw6FBiK4o2j3DXayGz-cfjw
-@tokenFuncionario = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiIzIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiZnVuY2lvbmFyaW9AcmFpemVzLmxvY2FsIiwiUGVyZmlsSWQiOiIzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRlVOQ0lPTkFSSU8iLCJleHAiOjE3OTA3MTY0MjEsImlzcyI6IlJhaXplc05vcmRlc3RlLkFwaSIsImF1ZCI6IlJhaXplc05vcmRlc3RlLkNsaWVudCJ9.JbwauIpsTaeb29wavTDUgsxYVA4T0O_dvQzS4yrY25A
+@tokenCliente = SEU_TOKEN_CLIENTE
+@tokenFuncionario = SEU_TOKEN_FUNCIONARIO
+@tokenAdmin = SEU_TOKEN_ADMIN
 @clienteId = 5
 
 
@@ -19,7 +20,7 @@ Content-Type: application/json
 
 //Teste de criacao de cliente 2
 POST {{RaizesNordeste.Api_HostAddress}}/api/usuarios
-Authorization: Bearer 
+Authorization: Bearer {{tokenFuncionario}}
 Content-Type: application/json
 
 {
@@ -58,7 +59,7 @@ GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios
 
 // Buscar usuários como cliente
 GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios
-Authorization: Bearer 
+Authorization: Bearer {{tokenCliente}}
 ###
 
 //  Login ADMIN
@@ -74,17 +75,17 @@ Content-Type: application/json
 
 // Buscar todos os usuários como ADMIN
 GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiIyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiYWRtaW5AcmFpemVzLmxvY2FsIiwiUGVyZmlsSWQiOiIyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU4iLCJleHAiOjE3OTA3MTU3ODcsImlzcyI6IlJhaXplc05vcmRlc3RlLkFwaSIsImF1ZCI6IlJhaXplc05vcmRlc3RlLkNsaWVudCJ9.OO2P366UQ1XQgKyozDxc6h7nWt83usij0qLJoRwnMQE
-###
+Authorization: Bearer {{tokenAdmin}}
 
+###
 // Buscar usuário existente por ID como ADMIN
 GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios/5
-Authorization: Bearer 
+Authorization: Bearer {{tokenAdmin}}
 ###
 
 //Buscar usuário inexistente como ADMIN
 GET {{RaizesNordeste.Api_HostAddress}}/api/usuarios/999999
-Authorization: Bearer 
+Authorization: Bearer {{tokenAdmin}}
 
 ###
 
@@ -122,7 +123,7 @@ Accept: application/json
 ### TESTE 1 - Criar pedido válido como CLIENTE
 POST https://localhost:7111/api/pedidos
 Content-Type: application/json
-Authorization: Bearer SEU_TOKEN_CLIENTE
+Authorization: Bearer {{tokenCliente}}
 
 {
   "clienteId": ID_DO_MESMO_CLIENTE_DO_TOKEN,
@@ -135,14 +136,6 @@ Authorization: Bearer SEU_TOKEN_CLIENTE
     }
   ]
 }
-
-
-### VARIÁVEIS - TESTES DE PEDIDOS
-
-@tokenCliente = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiI1IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiY2xpZW50ZS50ZXN0ZUByYWl6ZXMubG9jYWwiLCJQZXJmaWxJZCI6IjQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJDTElFTlRFIiwiZXhwIjoxNzkwNzE2MTI2LCJpc3MiOiJSYWl6ZXNOb3JkZXN0ZS5BcGkiLCJhdWQiOiJSYWl6ZXNOb3JkZXN0ZS5DbGllbnQifQ.e7-tKqu_4ppVxseh1JuUnw6FBiK4o2j3DXayGz-cfjw
-@tokenFuncionario = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc3VhcmlvSWQiOiIzIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiZnVuY2lvbmFyaW9AcmFpemVzLmxvY2FsIiwiUGVyZmlsSWQiOiIzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRlVOQ0lPTkFSSU8iLCJleHAiOjE3OTA3MTY0MjEsImlzcyI6IlJhaXplc05vcmRlc3RlLkFwaSIsImF1ZCI6IlJhaXplc05vcmRlc3RlLkNsaWVudCJ9.JbwauIpsTaeb29wavTDUgsxYVA4T0O_dvQzS4yrY25A
-@clienteId = 5
-
 
 ### TESTE 1 - Pedido válido como CLIENTE
 
@@ -410,3 +403,5 @@ Authorization: Bearer {{tokenCliente}}
     }
   ]
 }
+
+

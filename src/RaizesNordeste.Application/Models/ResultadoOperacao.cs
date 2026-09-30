@@ -8,5 +8,6 @@ namespace RaizesNordeste.Application.Models
     {
         public bool Resultado {  get; set; }
         public string Mensagem { get; set; } = string.Empty;
+        public object? Objeto { get; set; }
     }
 }
