@@ -405,3 +405,37 @@ Authorization: Bearer {{tokenCliente}}
 }
 
 
+
+
+### 1. Pagamento recusado - Pedido 6
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos/6/pagamentos
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+
+{
+  "metodoPagamento": "Pix",
+  "aprovar": false
+}
+
+
+### 2. Nova tentativa aprovada - Pedido 6
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos/6/pagamentos
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+
+{
+  "metodoPagamento": "Credito",
+  "aprovar": true
+}
+
+
+### 3. Tentativa de pagamento após pedido já pago - Pedido 6
+POST {{RaizesNordeste.Api_HostAddress}}/api/pedidos/6/pagamentos
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+
+{
+  "metodoPagamento": "Debito",
+  "aprovar": true
+}
+

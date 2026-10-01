@@ -1,4 +1,5 @@
-﻿using RaizesNordeste.Application.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using RaizesNordeste.Application.Repositories;
 using RaizesNordeste.Domain.Entities;
 using RaizesNordeste.Infrastructure.Persistence;
 using System;
@@ -27,5 +28,14 @@ namespace RaizesNordeste.Infrastructure.Repositories
             return pedido;
         }
 
+        public async Task<Pedido?> BuscarPedidoPorId(long id)
+        {
+            return await _context.Pedidos.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task SalvarAlteracoes()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -8,5 +8,10 @@ namespace RaizesNordeste.Application.Repositories
     public interface IPedidoRepository
     {
         Task<Pedido> SalvarPedido(Pedido pedido);
+
+        Task<Pedido?> BuscarPedidoPorId (long id);
+
+        Task SalvarAlteracoes();
+
     }
 }

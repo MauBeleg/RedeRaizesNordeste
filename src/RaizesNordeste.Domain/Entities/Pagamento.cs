@@ -8,7 +8,7 @@ namespace RaizesNordeste.Domain.Entities
         public long PedidoId { get; set; }
         public Pedido Pedido { get; set; } = null!;
         public StatusPagamento Status { get; set; }
-        public string FormaPagamento { get; set; } = string.Empty;
+        public MetodoPagamento FormaPagamento { get; set; }
         public decimal Valor { get; set; }
         public string? IdentificadorExterno {  get; set; }
         public long CriadoPor {  get; set; }

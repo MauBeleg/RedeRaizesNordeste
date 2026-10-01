@@ -67,6 +67,9 @@ builder.Services.AddScoped<PedidoService>();
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IPagamentoGateway, PagamentoMockGateway>();
+builder.Services.AddScoped<PedidoStatusService>();
+builder.Services.AddScoped<IPagamentoRepository, PagamentoRepository>();
+builder.Services.AddScoped<PagamentoService>();
 
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
