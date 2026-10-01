@@ -8,6 +8,8 @@ using RaizesNordeste.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
+using RaizesNordeste.Application.Gateways;
+using RaizesNordeste.Infrastructure.Gateways;
 
 
 
@@ -64,6 +66,8 @@ builder.Services.AddScoped<EstoqueService>();
 builder.Services.AddScoped<PedidoService>();
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+builder.Services.AddScoped<IPagamentoGateway, PagamentoMockGateway>();
+
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
