@@ -17,7 +17,7 @@ namespace RaizesNordeste.Application.Servicos
         private readonly IPedidoRepository _pedidoRepository;
         private readonly IProdutoRepository _produtoRepository;
 
-        public PedidoService(IUsuarioRepository usuarioRepository, IUnidadeRepository unidadeRepository, EstoqueService estoqueService, 
+        public PedidoService(IUsuarioRepository usuarioRepository, IUnidadeRepository unidadeRepository, EstoqueService estoqueService,
             IPedidoRepository pedidoRepository, IProdutoRepository produtoRepository)
         {
             _usuarioRepository = usuarioRepository;
@@ -53,7 +53,7 @@ namespace RaizesNordeste.Application.Servicos
 
             var usuarioAutenticado = await _usuarioRepository.BuscarUsuarioPorId(input.UsuarioAutenticadoId); //Verifica quem é o usuário que fez o pedido
 
-            if (usuarioAutenticado == null) 
+            if (usuarioAutenticado == null)
             {
                 return new ResultadoOperacao
                 {
@@ -252,8 +252,190 @@ namespace RaizesNordeste.Application.Servicos
             return new ResultadoOperacao
             {
                 Resultado = true,
-                Mensagem = $"Pedido criado com sucesso:",
+                Mensagem = "Pedido criado com sucesso:",
                 Objeto = pedidoCriadoOutput
+            };
+
+        }
+
+
+        public async Task<ResultadoOperacao> ListarPedidos(long usuarioAutenticadoId, CanalPedido? canalPedido, StatusPedido? statusPedido)
+        {
+            var usuarioAutenticado = await _usuarioRepository.BuscarUsuarioPorId(usuarioAutenticadoId);
+
+            if (usuarioAutenticado == null || !usuarioAutenticado.Ativo)
+            {
+                return new ResultadoOperacao
+                {
+                    Resultado = false,
+                    Mensagem = "Usuário não existente ou não ativo"
+                };
+            }
+
+            long? clienteId = null;
+            long? unidadeId = null;
+
+            if (usuarioAutenticado.PerfilId == 4)
+            {
+                clienteId = usuarioAutenticado.Id;
+            }
+
+            else if (usuarioAutenticado.PerfilId == 3)
+            {
+                if (!usuarioAutenticado.UnidadeId.HasValue)
+                {
+                    return new ResultadoOperacao
+                    {
+                        Resultado = false,
+                        Mensagem = "Funcionário não possui unidade vinculada"
+                    };
+                }
+
+                unidadeId = usuarioAutenticado.UnidadeId;
+            }
+            else if (usuarioAutenticado.PerfilId == 2)
+            {
+            }
+            else
+            {
+                return new ResultadoOperacao
+                {
+                    Resultado = false,
+                    Mensagem = "Não é possível realizar a operação"
+                };
+            }
+
+            var resposta = await _pedidoRepository.ListarPedidos(canalPedido, statusPedido, clienteId, unidadeId);
+
+            var pedidosOutput = new List<PedidoCriadoOutput>();
+
+            foreach (var pedido in resposta)
+            {
+                var itensOutput = new List<PedidoItemOutput>();
+
+                foreach (var item in pedido.Itens)
+                {
+                    itensOutput.Add(new PedidoItemOutput
+                    {
+                        Produto = item.Produto.Nome,
+                        Quantidade = item.Quantidade,
+                        ValorUnitario = item.ValorUnitario,
+                        ValorTotal = item.ValorTotal
+                    });
+                }
+
+                pedidosOutput.Add(new PedidoCriadoOutput
+                {
+                    Id = pedido.Id,
+                    Cliente = pedido.Cliente.Nome,
+                    Unidade = pedido.Unidade.Nome,
+                    CanalPedido = pedido.CanalPedido,
+                    Subtotal = pedido.Subtotal,
+                    Desconto = pedido.Desconto,
+                    ValorTotal = pedido.ValorTotal,
+                    Status = pedido.Status,
+                    DataCriacao = pedido.DataCriacao,
+                    Itens = itensOutput
+                });
+            }
+
+            return new ResultadoOperacao
+            {
+                Resultado = true,
+                Mensagem = "Pedidos Retornados",
+                Objeto = pedidosOutput
+            };
+
+        }
+
+
+        public async Task<ResultadoOperacao> BuscarPedidoPorId(long pedidoId, long usuarioAutenticadoId)
+        {
+            var usuarioAutenticado = await _usuarioRepository.BuscarUsuarioPorId(usuarioAutenticadoId);
+
+            if (usuarioAutenticado == null || !usuarioAutenticado.Ativo)
+            {
+                return new ResultadoOperacao
+                {
+                    Resultado = false,
+                    Mensagem = "Usuário não existente ou não ativo"
+                };
+            }
+
+            var pedido = await _pedidoRepository.BuscarPedidoPorId(pedidoId);
+
+            if (pedido == null)
+            {
+                return new ResultadoOperacao
+                {
+                    Resultado = false,
+                    Mensagem = "Pedido não encontrado"
+                };
+            }
+
+            if (usuarioAutenticado.PerfilId == 4)
+            {
+                if (pedido.ClienteId != usuarioAutenticado.Id)
+                {
+                    return new ResultadoOperacao
+                    {
+                        Resultado = false,
+                        Mensagem = "Usuário não possui acesso a este pedido"
+                    };
+                }
+            }
+            else if (usuarioAutenticado.PerfilId == 3)
+            {
+                if (!usuarioAutenticado.UnidadeId.HasValue || pedido.UnidadeId != usuarioAutenticado.UnidadeId.Value)
+                {
+                    return new ResultadoOperacao
+                    {
+                        Resultado = false,
+                        Mensagem = "Usuário não possui acesso a este pedido"
+                    };
+                }
+            }
+            else if (usuarioAutenticado.PerfilId != 2)
+            {
+                return new ResultadoOperacao
+                {
+                    Resultado = false,
+                    Mensagem = "Não é possível realizar a operação"
+                };
+            }
+
+            var itensOutput = new List<PedidoItemOutput>();
+
+            foreach (var item in pedido.Itens)
+            {
+                itensOutput.Add(new PedidoItemOutput
+                {
+                    Produto = item.Produto.Nome,
+                    Quantidade = item.Quantidade,
+                    ValorUnitario = item.ValorUnitario,
+                    ValorTotal = item.ValorTotal
+                });
+            }
+
+            var pedidoOutput = new PedidoCriadoOutput
+            {
+                Id = pedido.Id,
+                Cliente = pedido.Cliente.Nome,
+                Unidade = pedido.Unidade.Nome,
+                CanalPedido = pedido.CanalPedido,
+                Subtotal = pedido.Subtotal,
+                Desconto = pedido.Desconto,
+                ValorTotal = pedido.ValorTotal,
+                Status = pedido.Status,
+                DataCriacao = pedido.DataCriacao,
+                Itens = itensOutput
+            };
+
+            return new ResultadoOperacao
+            {
+                Resultado = true,
+                Mensagem = "Pedido retornado",
+                Objeto = pedidoOutput
             };
 
         }
