@@ -10,6 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
 using RaizesNordeste.Application.Gateways;
 using RaizesNordeste.Infrastructure.Gateways;
+using RaizesNordeste.Api.Middlewares;
+using RaizesNordeste.Api.DTOs;
 
 
 
@@ -27,7 +29,7 @@ builder.Services.AddControllers()
             new JsonStringEnumConverter()
         );
     });
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{ //define atributos de token
     var chaveJwt = builder.Configuration["Jwt:Chave"];
     var issuer = builder.Configuration["Jwt:Issuer"];
     var audience = builder.Configuration["Jwt:Audience"];
@@ -37,7 +39,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     );
 
 
-    options.TokenValidationParameters = new TokenValidationParameters
+    options.TokenValidationParameters = new TokenValidationParameters //define validações do token
     {
         ValidateIssuer = true,
         ValidateAudience = true,
@@ -47,6 +49,44 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidIssuer = issuer,
         ValidAudience = audience,
         IssuerSigningKey = chave
+    };
+
+
+    options.Events = new JwtBearerEvents //define eventos que podem ocorrer por conta de não validade de token ou não acesso
+    {
+        OnChallenge = async context =>
+        {
+            context.HandleResponse();
+
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+            context.Response.ContentType = "application/json";
+
+            var erro = new ErroRespostaDTO
+            {
+                Status = 401,
+                Erro = "Não autenticado",
+                Mensagem = "Autenticação necessária para acessar este recurso"
+            };
+
+            await context.Response.WriteAsJsonAsync(erro);
+        },
+
+        OnForbidden = async context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+            context.Response.ContentType = "application/json";
+
+            var erro = new ErroRespostaDTO
+            {
+                Status = 403,
+                Erro = "Acesso negado",
+                Mensagem = "Usuário não possui permissão para acessar este recurso"
+            };
+
+            await context.Response.WriteAsJsonAsync(erro);
+        }
     };
 
 });
@@ -75,6 +115,7 @@ builder.Services.AddScoped<PagamentoService>();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
 var app = builder.Build();
+app.UseMiddleware<TratamentoErrosMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

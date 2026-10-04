@@ -3,6 +3,7 @@ using RaizesNordeste.Api.DTOs;
 using RaizesNordeste.Application.Servicos;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using RaizesNordeste.Api.Helpers;
 
 
 namespace RaizesNordeste.Api.Controllers
@@ -28,7 +29,7 @@ namespace RaizesNordeste.Api.Controllers
 
             if (cardapio == null)
             {
-                return NotFound("Cardápio não encontrado.");
+                return NotFound(ErroRespostaHelper.NaoEncontrado("Cardápio não encontrado."));
             }
 
             CardapioDTO cardapioDTO = new CardapioDTO

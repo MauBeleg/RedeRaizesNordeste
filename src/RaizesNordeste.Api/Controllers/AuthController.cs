@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RaizesNordeste.Api.DTOs;
 using RaizesNordeste.Application.Servicos;
+using RaizesNordeste.Api.Helpers;
 
 namespace RaizesNordeste.Api.Controllers
 {
@@ -25,7 +26,7 @@ namespace RaizesNordeste.Api.Controllers
     
             if (token == null)
             {
-                return Unauthorized("Email ou senha incorretos. Tente novamente");
+                return Unauthorized(ErroRespostaHelper.NaoAutenticado("Email ou senha incorretos. Tente novamente"));
             }
     
             return Ok(new {token});

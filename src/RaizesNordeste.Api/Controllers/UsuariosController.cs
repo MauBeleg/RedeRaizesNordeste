@@ -3,6 +3,7 @@ using RaizesNordeste.Api.DTOs;
 using RaizesNordeste.Application.Servicos;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using RaizesNordeste.Api.Helpers;
 
 namespace RaizesNordeste.Api.Controllers
 {
@@ -26,8 +27,9 @@ namespace RaizesNordeste.Api.Controllers
             var result = await _usuarioService.CriarCliente(dto.Nome, dto.Email, dto.Senha);
 
 
-            if (!result){
-                return Conflict("Já existe um usuário cadastrado com este e-mail.");
+            if (!result)
+            {
+                return Conflict(ErroRespostaHelper.Conflito("Já existe um usuário cadastrado com este e-mail."));
             }
 
             return StatusCode(201, "Usuário criado com sucesso.");
@@ -70,7 +72,7 @@ namespace RaizesNordeste.Api.Controllers
             var usuario = await _usuarioService.BuscarUsuarioPorId(id);
              if (usuario == null)
             {
-                return NotFound("Usuário não encontrado");
+                return NotFound(ErroRespostaHelper.NaoEncontrado("Usuário não encontrado"));
             }
 
             UsuarioDTO usuarioDTO = new UsuarioDTO()

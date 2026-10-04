@@ -3,6 +3,7 @@ using RaizesNordeste.Api.DTOs;
 using RaizesNordeste.Application.Servicos;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using RaizesNordeste.Api.Helpers;
 
 namespace RaizesNordeste.Api.Controllers
 {
@@ -45,7 +46,7 @@ namespace RaizesNordeste.Api.Controllers
 
             if (unidade == null)
             {
-                return NotFound("Unidade não encontrada.");
+                return NotFound(ErroRespostaHelper.NaoEncontrado("Unidade não encontrada."));
             }
 
 

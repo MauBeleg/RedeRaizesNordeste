@@ -6,6 +6,7 @@ using RaizesNordeste.Application.Models;
 using RaizesNordeste.Application.Servicos;
 using RaizesNordeste.Domain.Enums;
 using System.Security.Claims;
+using RaizesNordeste.Api.Helpers;
 
 [ApiController]
 [Route("api/pedidos")]
@@ -33,14 +34,14 @@ public class PedidosController : ControllerBase
 
         if (dto.CanalPedido == null)
         {
-            return BadRequest("Canal de Pedido é obrigatório");
+            return BadRequest(ErroRespostaHelper.RequisicaoInvalida("Canal de Pedido é obrigatório"));
         }
 
         var usuarioIdClaim = User.FindFirst("UsuarioId")?.Value;
 
         if (!long.TryParse(usuarioIdClaim, out var usuarioAutenticadoId))
         {
-            return Unauthorized();
+            return Unauthorized(ErroRespostaHelper.NaoAutenticado("Não foi possível identificar o usuário autenticado"));
         }
 
         var itensInput = new List<CriarPedidoItemInput>();
@@ -70,13 +71,29 @@ public class PedidosController : ControllerBase
 
         if (!resultado.Resultado)
         {
-            return BadRequest(resultado.Mensagem);
+            if (resultado.Mensagem == "Usuário inexistente" || resultado.Mensagem == "Unidade inválida" || resultado.Mensagem == "Produto inválido")
+            {
+                return NotFound(ErroRespostaHelper.NaoEncontrado(resultado.Mensagem));
+            }
+
+            if (resultado.Mensagem == "Usuário inválido para operação ou inativo" || resultado.Mensagem == "Cliente do pedido inválido")
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, ErroRespostaHelper.AcessoNegado(resultado.Mensagem));
+            }
+
+            if (resultado.Mensagem == "Cliente inválido ou inativo" || resultado.Mensagem == "Estoque indisponível para o pedido")
+            {
+                return UnprocessableEntity(ErroRespostaHelper.RegraNegocio(resultado.Mensagem));
+            }
+
+            return BadRequest(ErroRespostaHelper.RequisicaoInvalida(resultado.Mensagem));
         }
 
 
         if (resultado.Objeto is not PedidoCriadoOutput pedidoOutput)
         {
-            return StatusCode(500, "Não foi possível obter os dados do pedido criado");
+            return StatusCode(StatusCodes.Status500InternalServerError, ErroRespostaHelper.Criar(StatusCodes.Status500InternalServerError,
+                "Erro interno", "Não foi possível obter os dados do pedido criado"));
         }
 
         var pedidoCriadoItensDTO = new List<PedidoItemRespostaDTO>();
@@ -137,7 +154,7 @@ public class PedidosController : ControllerBase
 
         if (!resultado)
         {
-            return BadRequest("Não foi possível alterar o status do pedido");
+            return Conflict(ErroRespostaHelper.Conflito("Não foi possível alterar o status do pedido"));
         }
 
         return Ok("Status do pedido alterado com sucesso");
@@ -154,7 +171,7 @@ public class PedidosController : ControllerBase
 
         if (!long.TryParse(usuarioIdClaim, out var usuarioAutenticadoId))
         {
-            return Unauthorized();
+            return Unauthorized(ErroRespostaHelper.NaoAutenticado("Não foi possível identificar o usuário autenticado"));
         }
 
         var aprovar = dto.Aprovar ?? true;
@@ -163,12 +180,23 @@ public class PedidosController : ControllerBase
 
         if (!resultado.Resultado)
         {
-            return BadRequest(resultado.Mensagem);
+            if (resultado.Mensagem == "Pedido não encontrado")
+            {
+                return NotFound(ErroRespostaHelper.NaoEncontrado(resultado.Mensagem));
+            }
+
+            if (resultado.Mensagem == "O pedido não está aguardando pagamento")
+            {
+                return Conflict(ErroRespostaHelper.Conflito(resultado.Mensagem));
+            }
+
+            return BadRequest(ErroRespostaHelper.RequisicaoInvalida(resultado.Mensagem));
         }
 
         if (resultado.Objeto is not ResultadoPagamento resultadoPagamento)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Não foi possível obter o resultado do pagamento");
+            return StatusCode(StatusCodes.Status500InternalServerError, ErroRespostaHelper.Criar(StatusCodes.Status500InternalServerError,
+    "Erro interno", "Não foi possível obter o resultado do pagamento"));
         }
 
         var resposta = new PagamentoRespostaDTO
@@ -189,19 +217,20 @@ public class PedidosController : ControllerBase
 
         if (!long.TryParse(usuarioIdClaim, out var usuarioAutenticadoId))
         {
-            return Unauthorized();
+            return Unauthorized(ErroRespostaHelper.NaoAutenticado("Não foi possível identificar o usuário autenticado"));
         }
 
         var resultado = await _pedidoService.ListarPedidos(usuarioAutenticadoId, canalPedido, statusPedido);
 
         if (!resultado.Resultado)
         {
-            return BadRequest(resultado.Mensagem);
+            return BadRequest(ErroRespostaHelper.RequisicaoInvalida(resultado.Mensagem));
         }
 
         if (resultado.Objeto is not List<PedidoCriadoOutput> pedidosOutput)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Não foi possível obter os pedidos");
+            return StatusCode(StatusCodes.Status500InternalServerError, ErroRespostaHelper.Criar(StatusCodes.Status500InternalServerError, "Erro interno",
+                "Não foi possível obter os pedidos"));
         }
 
         var pedidosDTO = new List<PedidoCriadoDTO>();
@@ -250,7 +279,7 @@ public class PedidosController : ControllerBase
 
         if (!long.TryParse(usuarioIdClaim, out var usuarioAutenticadoId))
         {
-            return Unauthorized();
+            return Unauthorized(ErroRespostaHelper.NaoAutenticado("Não foi possível identificar o usuário autenticado"));
         }
 
         var resultado = await _pedidoService.BuscarPedidoPorId(id, usuarioAutenticadoId);
@@ -260,24 +289,21 @@ public class PedidosController : ControllerBase
             if (resultado.Mensagem == "Usuário não possui acesso a este pedido" ||
                 resultado.Mensagem == "Não é possível realizar a operação")
             {
-                return StatusCode(
-                    StatusCodes.Status403Forbidden,
-                    resultado.Mensagem);
+                return StatusCode(StatusCodes.Status403Forbidden,ErroRespostaHelper.AcessoNegado(resultado.Mensagem));
             }
 
             if (resultado.Mensagem == "Pedido não encontrado")
             {
-                return NotFound(resultado.Mensagem);
+                return NotFound(ErroRespostaHelper.NaoEncontrado(resultado.Mensagem));
             }
 
-            return BadRequest(resultado.Mensagem);
+            return BadRequest(ErroRespostaHelper.RequisicaoInvalida(resultado.Mensagem));
         }
 
         if (resultado.Objeto is not PedidoCriadoOutput pedidoOutput)
         {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                "Não foi possível obter os dados do pedido");
+            return StatusCode(StatusCodes.Status500InternalServerError,ErroRespostaHelper.Criar(StatusCodes.Status500InternalServerError,"Erro interno",
+                    "Não foi possível obter os dados do pedido"));
         }
 
         var itensDTO = new List<PedidoItemRespostaDTO>();
