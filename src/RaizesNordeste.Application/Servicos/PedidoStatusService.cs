@@ -1,5 +1,6 @@
-﻿using RaizesNordeste.Domain.Enums;
-using RaizesNordeste.Application.Repositories;
+﻿using RaizesNordeste.Application.Repositories;
+using RaizesNordeste.Application.Services;
+using RaizesNordeste.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace RaizesNordeste.Application.Servicos
@@ -8,11 +9,15 @@ namespace RaizesNordeste.Application.Servicos
     {
 
         private readonly IPedidoRepository _pedidoRepository;
+        private readonly AuditoriaService _auditoriaService;
 
 
-        public PedidoStatusService(IPedidoRepository pedidoRepository)
+
+        public PedidoStatusService(IPedidoRepository pedidoRepository, AuditoriaService auditoriaService)
         {
             _pedidoRepository = pedidoRepository;
+            _auditoriaService = auditoriaService;
+
         }
 
         public bool PodeTransicionar(StatusPedido statusAtual,StatusPedido novoStatus)
@@ -32,7 +37,7 @@ namespace RaizesNordeste.Application.Servicos
         }
 
 
-        public async Task<bool> AlterarStatus(long pedidoId, StatusPedido novoStatus)
+        public async Task<bool> AlterarStatus(long pedidoId, StatusPedido novoStatus, long usuarioAutenticadoId)
         {
             var pedido = await _pedidoRepository.BuscarPedidoPorId(pedidoId);
 
@@ -48,9 +53,13 @@ namespace RaizesNordeste.Application.Servicos
                 return false;
             }
 
+            var statusAnterior = pedido.Status;
+
             pedido.Status = novoStatus;
 
             await _pedidoRepository.SalvarAlteracoes();
+
+            await _auditoriaService.Registrar(usuarioAutenticadoId, "STATUS_ALTERADO", "PEDIDO", pedido.Id, $"{statusAnterior} -> {novoStatus}" );
 
             return true;
 

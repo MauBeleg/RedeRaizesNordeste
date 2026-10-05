@@ -10,15 +10,10 @@ namespace RaizesNordeste.Application.Repositories
 
 
          Task<bool> VerificarEmail(string email);
-
-
-         Task CreateUsuario(Usuario usuario);
-
-
+        Task<bool> VerificarCpf(string cpf);
+        Task CreateUsuario(Usuario usuario);
         Task<Usuario?> BuscarUsuarioPorEmail(string email);
-
         Task<List<Usuario>> BuscarUsuarios();
-
         Task<Usuario?> BuscarUsuarioPorId (long  id);
 
 

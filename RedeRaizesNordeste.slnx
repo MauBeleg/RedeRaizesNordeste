@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/docs/">
+    <File Path="docs/seguranca-lgpd.md" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/RaizesNordeste.Api/RaizesNordeste.Api.csproj" />
     <Project Path="src/RaizesNordeste.Application/RaizesNordeste.Application.csproj" />

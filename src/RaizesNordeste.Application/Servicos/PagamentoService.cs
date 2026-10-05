@@ -1,6 +1,7 @@
 ﻿using RaizesNordeste.Application.Gateways;
 using RaizesNordeste.Application.Models;
 using RaizesNordeste.Application.Repositories;
+using RaizesNordeste.Application.Services;
 using RaizesNordeste.Domain.Entities;
 using RaizesNordeste.Domain.Enums;
 using System;
@@ -15,14 +16,16 @@ namespace RaizesNordeste.Application.Servicos
         private readonly IPedidoRepository _pedidoRepository;
         private readonly IPagamentoRepository _pagamentoRepository;
         private readonly PedidoStatusService _pedidoStatusService;
+        private readonly AuditoriaService _auditoriaService;
 
         public PagamentoService(IPagamentoGateway pagamentoGateway, IPedidoRepository pedidoRepository, IPagamentoRepository pagamentoRepository,
-            PedidoStatusService pedidoStatusService)
+            PedidoStatusService pedidoStatusService, AuditoriaService auditoriaService)
         {
             _pagamentoGateway = pagamentoGateway;
             _pedidoRepository = pedidoRepository;
             _pagamentoRepository = pagamentoRepository;
             _pedidoStatusService = pedidoStatusService;
+            _auditoriaService = auditoriaService;
         }
 
         public async Task<ResultadoOperacao> ProcessarPagamento(long pedidoId, MetodoPagamento metodoPagamento, bool aprovar, long usuarioAutenticadoId)
@@ -70,6 +73,7 @@ namespace RaizesNordeste.Application.Servicos
 
 
             await _pagamentoRepository.SalvarPagamento(pagamento);
+            await _auditoriaService.Registrar(usuarioAutenticadoId, "PAGAMENTO_PROCESSADO", "PAGAMENTO", pagamento.Id, $"Status: {resultadoPagamento.Status}");
 
             if (resultadoPagamento.Status != StatusPagamento.Aprovado)
             {
@@ -81,7 +85,7 @@ namespace RaizesNordeste.Application.Servicos
                 };
             }
 
-            var statusAlterado = await _pedidoStatusService.AlterarStatus(pedidoId, StatusPedido.Recebido);
+            var statusAlterado = await _pedidoStatusService.AlterarStatus(pedidoId, StatusPedido.Recebido, usuarioAutenticadoId);
 
             if (!statusAlterado)
             {

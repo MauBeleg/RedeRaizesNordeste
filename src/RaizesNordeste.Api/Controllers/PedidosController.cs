@@ -137,6 +137,12 @@ public class PedidosController : ControllerBase
     public async Task<IActionResult> AlterarStatus(long id, AlterarStatusPedidoDTO dto)
     {
 
+        var usuarioIdClaim = User.FindFirst("UsuarioId")?.Value;
+
+        if (!long.TryParse(usuarioIdClaim, out var usuarioAutenticadoId))
+        {
+            return Unauthorized(ErroRespostaHelper.NaoAutenticado("Usuário autenticado inválido"));
+        }
 
         var perfil = User.FindFirst(ClaimTypes.Role)?.Value;
 
@@ -150,7 +156,7 @@ public class PedidosController : ControllerBase
             return Forbid();
         }
 
-        var resultado = await _pedidoStatusService.AlterarStatus(id, dto.Status);
+        var resultado = await _pedidoStatusService.AlterarStatus(id, dto.Status, usuarioAutenticadoId);
 
         if (!resultado)
         {

@@ -21,20 +21,38 @@ namespace RaizesNordeste.Api.Controllers
 
         //Criar cliente
         [HttpPost]
-        public async Task<IActionResult> CriarCliente(
-            [FromBody] CriarUsuarioDTO dto)
+        public async Task<IActionResult> CriarCliente([FromBody] CriarUsuarioDTO dto)
         {
-            var result = await _usuarioService.CriarCliente(dto.Nome, dto.Email, dto.Senha);
-
-
-            if (!result)
+            if (string.IsNullOrWhiteSpace(dto.Cpf))
             {
-                return Conflict(ErroRespostaHelper.Conflito("Já existe um usuário cadastrado com este e-mail."));
+                return BadRequest(ErroRespostaHelper.RequisicaoInvalida("O CPF deve ser informado."));
             }
 
-            return StatusCode(201, "Usuário criado com sucesso.");
+            if (!dto.DataNascimento.HasValue)
+            {
+                return BadRequest(ErroRespostaHelper.RequisicaoInvalida("A data de nascimento deve ser informada."));
+            }
 
+            var cpf = dto.Cpf.Trim().Replace(".", "").Replace("-", "");
 
+            if (cpf.Length != 11 || !cpf.All(char.IsDigit))
+            {
+                return BadRequest(ErroRespostaHelper.RequisicaoInvalida("CPF inválido."));
+            }
+
+            if (dto.DataNascimento.Value.Date > DateTime.UtcNow.Date)
+            {
+                return BadRequest(ErroRespostaHelper.RequisicaoInvalida("A data de nascimento não pode ser futura."));
+            }
+
+            var result = await _usuarioService.CriarCliente(dto.Nome, dto.Email, dto.Senha, cpf, dto.DataNascimento.Value);
+
+            if (!result.Resultado)
+            {
+                return Conflict(ErroRespostaHelper.Conflito(result.Mensagem));
+            }
+
+            return StatusCode(201, result.Mensagem);
         }
 
 

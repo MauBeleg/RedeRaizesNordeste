@@ -8,6 +8,8 @@ namespace RaizesNordeste.Domain.Entities
         public long Id { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        public string? Cpf { get; set; }
+        public DateTime? DataNascimento { get; set; }
         public string SenhaHash { get; set; } = string.Empty;
         public long PerfilId { get; set; }
         public Perfil Perfil { get; set; } = null!;

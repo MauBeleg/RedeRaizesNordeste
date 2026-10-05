@@ -140,12 +140,19 @@ namespace RaizesNordeste.Infrastructure.Persistence
             modelBuilder.Entity<Usuario>().Property(usuario => usuario.Setor).HasConversion<string>();
 
 
+            //configuracao dos dados pessoais do usuario
+            modelBuilder.Entity<Usuario>().Property(usuario => usuario.Cpf).HasMaxLength(11);
+            modelBuilder.Entity<Usuario>().Property(usuario => usuario.DataNascimento).HasColumnType("date");
+
+
 
             //definicao dos indices
 
             //indices unicos
             modelBuilder.Entity<Usuario>().HasIndex(usuario => usuario.Email).IsUnique();
+            modelBuilder.Entity<Usuario>().HasIndex(usuario => usuario.Cpf).IsUnique();
             modelBuilder.Entity<PontosCliente>().HasIndex(pontosCliente => pontosCliente.ClienteId).IsUnique();
+
 
             //indices compostos
             modelBuilder.Entity<CardapioItem>().HasIndex(item => new { item.CardapioId, item.ProdutoId }).IsUnique();

@@ -1,5 +1,6 @@
 ﻿using RaizesNordeste.Application.Models;
 using RaizesNordeste.Application.Repositories;
+using RaizesNordeste.Application.Services;
 using RaizesNordeste.Domain.Entities;
 using RaizesNordeste.Domain.Enums;
 using System;
@@ -16,15 +17,17 @@ namespace RaizesNordeste.Application.Servicos
         private readonly EstoqueService _estoqueService;
         private readonly IPedidoRepository _pedidoRepository;
         private readonly IProdutoRepository _produtoRepository;
+        private readonly AuditoriaService _auditoriaService;
 
         public PedidoService(IUsuarioRepository usuarioRepository, IUnidadeRepository unidadeRepository, EstoqueService estoqueService,
-            IPedidoRepository pedidoRepository, IProdutoRepository produtoRepository)
+            IPedidoRepository pedidoRepository, IProdutoRepository produtoRepository, AuditoriaService auditoriaService)
         {
             _usuarioRepository = usuarioRepository;
             _unidadeRepository = unidadeRepository;
             _estoqueService = estoqueService;
             _pedidoRepository = pedidoRepository;
             _produtoRepository = produtoRepository;
+            _auditoriaService = auditoriaService;
         }
 
 
@@ -232,6 +235,7 @@ namespace RaizesNordeste.Application.Servicos
             };
 
             await _pedidoRepository.SalvarPedido(pedido);
+            await _auditoriaService.Registrar(input.UsuarioAutenticadoId, "PEDIDO_CRIADO", "PEDIDO", pedido.Id, "Pedido criado"); //registra auditoria de pedido
 
 
             var pedidoCriadoOutput = new PedidoCriadoOutput

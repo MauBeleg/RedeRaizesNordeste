@@ -1,17 +1,18 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using RaizesNordeste.Infrastructure.Persistence;
+using Microsoft.IdentityModel.Tokens;
+using RaizesNordeste.Api.DTOs;
+using RaizesNordeste.Api.Middlewares;
+using RaizesNordeste.Application.Gateways;
 using RaizesNordeste.Application.Repositories;
 using RaizesNordeste.Application.Security;
+using RaizesNordeste.Application.Services;
 using RaizesNordeste.Application.Servicos;
+using RaizesNordeste.Infrastructure.Gateways;
+using RaizesNordeste.Infrastructure.Persistence;
 using RaizesNordeste.Infrastructure.Repositories;
 using RaizesNordeste.Infrastructure.Security;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
-using RaizesNordeste.Application.Gateways;
-using RaizesNordeste.Infrastructure.Gateways;
-using RaizesNordeste.Api.Middlewares;
-using RaizesNordeste.Api.DTOs;
 
 
 
@@ -110,7 +111,10 @@ builder.Services.AddScoped<IPagamentoGateway, PagamentoMockGateway>();
 builder.Services.AddScoped<PedidoStatusService>();
 builder.Services.AddScoped<IPagamentoRepository, PagamentoRepository>();
 builder.Services.AddScoped<PagamentoService>();
-
+builder.Services.AddScoped<IAuditoriaRepository, AuditoriaRepository>();
+builder.Services.AddScoped<AuditoriaService>();
+builder.Services.AddScoped<IConsentimentoRepository, ConsentimentoRepository>();
+builder.Services.AddScoped<ConsentimentoService>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 

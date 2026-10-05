@@ -20,6 +20,12 @@ namespace RaizesNordeste.Infrastructure.Repositories
             return await _context.Usuarios.AnyAsync(u => u.Email == email);
         }
 
+        //Verifica se CPF já existe no BD
+        public async Task<bool> VerificarCpf(string cpf)
+        {
+            return await _context.Usuarios.AnyAsync(u => u.Cpf == cpf);
+        }
+
         //Cria Usuário
         public async Task CreateUsuario(Usuario usuario)
         {

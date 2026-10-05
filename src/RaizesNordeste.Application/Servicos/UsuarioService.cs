@@ -1,6 +1,7 @@
 ﻿using RaizesNordeste.Application.Repositories;
 using RaizesNordeste.Application.Security;
 using RaizesNordeste.Domain.Entities;
+using RaizesNordeste.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,30 +22,48 @@ namespace RaizesNordeste.Application.Servicos
 
         //metodos do service de usuários
 
-        public async Task<bool> CriarCliente(string nome, string email, string senha)
+        public async Task<ResultadoOperacao> CriarCliente(string nome, string email, string senha, string cpf, DateTime dataNascimento)
         {
-            
-            var exists = await _usuarioRepository.VerificarEmail(email);
-            if (exists == true)
+            var emailExiste = await _usuarioRepository.VerificarEmail(email);
+
+            if (emailExiste)
             {
-                return false;
+                return new ResultadoOperacao
+                {
+                    Resultado = false,
+                    Mensagem = "Já existe um usuário cadastrado com este e-mail."
+                };
             }
 
+            var cpfExiste = await _usuarioRepository.VerificarCpf(cpf);
+
+            if (cpfExiste)
+            {
+                return new ResultadoOperacao
+                {
+                    Resultado = false,
+                    Mensagem = "Já existe um usuário cadastrado com este CPF."
+                };
+            }
 
             var usuario = new Usuario()
             {
                 Nome = nome,
                 Email = email,
+                Cpf = cpf,
+                DataNascimento = dataNascimento.Date,
                 SenhaHash = _senhaHasher.GerarHash(senha),
                 PerfilId = 4,
                 Ativo = true
             };
 
-
             await _usuarioRepository.CreateUsuario(usuario);
 
-            return true;
-
+            return new ResultadoOperacao
+            {
+                Resultado = true,
+                Mensagem = "Usuário criado com sucesso."
+            };
         }
 
 
