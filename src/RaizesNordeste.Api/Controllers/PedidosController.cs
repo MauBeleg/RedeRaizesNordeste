@@ -10,6 +10,7 @@ using RaizesNordeste.Api.Helpers;
 
 [ApiController]
 [Route("api/pedidos")]
+[Produces("application/json")]
 [Authorize]
 public class PedidosController : ControllerBase
 {
@@ -27,8 +28,15 @@ public class PedidosController : ControllerBase
 
 
 
-    
+
     [HttpPost]
+    [ProducesResponseType(typeof(PedidoCriadoDTO), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CriarPedido(CriarPedidoDTO dto)
     {
 
@@ -134,6 +142,12 @@ public class PedidosController : ControllerBase
 
 
     [HttpPatch("{id}/status")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> AlterarStatus(long id, AlterarStatusPedidoDTO dto)
     {
 
@@ -171,6 +185,13 @@ public class PedidosController : ControllerBase
 
     [Authorize(Roles = "ADMIN,FUNCIONARIO,CLIENTE")]
     [HttpPost("{id}/pagamentos")]
+    [ProducesResponseType(typeof(PagamentoRespostaDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ProcessarPagamento(long id, ProcessarPagamentoDTO dto)
     {
         var usuarioIdClaim = User.FindFirst("UsuarioId")?.Value;
@@ -217,6 +238,10 @@ public class PedidosController : ControllerBase
 
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<PedidoCriadoDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ListarPedidos([FromQuery] CanalPedido? canalPedido, [FromQuery(Name = "status")] StatusPedido? statusPedido)
     {
         var usuarioIdClaim = User.FindFirst("UsuarioId")?.Value;
@@ -279,6 +304,12 @@ public class PedidosController : ControllerBase
 
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(PedidoCriadoDTO), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> BuscarPedidoPorId(long id)
     {
         var usuarioIdClaim = User.FindFirst("UsuarioId")?.Value;

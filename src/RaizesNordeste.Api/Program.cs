@@ -13,6 +13,9 @@ using RaizesNordeste.Infrastructure.Persistence;
 using RaizesNordeste.Infrastructure.Repositories;
 using RaizesNordeste.Infrastructure.Security;
 using System.Text.Json.Serialization;
+using RaizesNordeste.Api.OpenApi;
+using Microsoft.AspNetCore.Mvc;
+using RaizesNordeste.Api.Helpers;
 
 
 
@@ -20,7 +23,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+    options.AddOperationTransformer<BearerSecurityRequirementTransformer>();
+});
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers()
@@ -30,6 +37,19 @@ builder.Services.AddControllers()
             new JsonStringEnumConverter()
         );
     });
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var erro = ErroRespostaHelper.RequisicaoInvalida(
+            "Um ou mais campos informados são inválidos."
+        );
+
+        return new BadRequestObjectResult(erro);
+    };
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>{ //define atributos de token
     var chaveJwt = builder.Configuration["Jwt:Chave"];
     var issuer = builder.Configuration["Jwt:Issuer"];
@@ -125,6 +145,11 @@ app.UseMiddleware<TratamentoErrosMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "Rede Raízes do Nordeste API v1");
+    });
 }
 
 app.UseHttpsRedirection();

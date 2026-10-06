@@ -7,6 +7,7 @@ namespace RaizesNordeste.Api.Controllers
 {
     [ApiController]
     [Route("api/auditorias")]
+    [Produces("application/json")]
     [Authorize(Roles = "ADMIN")]
     public class AuditoriasController : ControllerBase
     {
@@ -18,6 +19,10 @@ namespace RaizesNordeste.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<AuditoriaRespostaDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ListarAuditorias([FromQuery] long? usuarioId, [FromQuery] string? acao, [FromQuery] string? entidade, [FromQuery] long? registroId)
         {
             var auditorias = await _auditoriaService.ListarAuditorias(usuarioId, acao, entidade, registroId );

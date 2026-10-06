@@ -9,6 +9,7 @@ namespace RaizesNordeste.Api.Controllers
 {
     [ApiController]
     [Route("api/usuarios")]
+    [Produces("application/json")]
     public class UsuariosController : ControllerBase
     {
         private readonly UsuarioService _usuarioService;
@@ -21,7 +22,11 @@ namespace RaizesNordeste.Api.Controllers
 
         //Criar cliente
         [HttpPost]
-        public async Task<IActionResult> CriarCliente([FromBody] CriarUsuarioDTO dto)
+        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CriarCliente([FromBody] CriarClienteDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Cpf))
             {
@@ -56,10 +61,63 @@ namespace RaizesNordeste.Api.Controllers
         }
 
 
+        // Criar funcionário - Admin
+        [Authorize(Roles = "ADMIN")]
+        [HttpPost("funcionarios")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CriarFuncionario([FromBody] CriarFuncionarioDTO dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Cpf))
+            {
+                return BadRequest(ErroRespostaHelper.RequisicaoInvalida("O CPF deve ser informado."));
+            }
+
+            if (!dto.DataNascimento.HasValue)
+            {
+                return BadRequest(ErroRespostaHelper.RequisicaoInvalida("A data de nascimento deve ser informada."));
+            }
+
+            var cpf = dto.Cpf.Trim().Replace(".", "").Replace("-", "");
+
+            if (cpf.Length != 11 || !cpf.All(char.IsDigit))
+            {
+                return BadRequest(ErroRespostaHelper.RequisicaoInvalida("CPF inválido."));
+            }
+
+            if (dto.DataNascimento.Value.Date > DateTime.UtcNow.Date)
+            {
+                return BadRequest(ErroRespostaHelper.RequisicaoInvalida("A data de nascimento não pode ser futura."));
+            }
+
+            var result = await _usuarioService.CriarFuncionario(dto.Nome, dto.Email, dto.Senha, cpf, dto.DataNascimento.Value, dto.UnidadeId, dto.Setor);
+
+            if (!result.Resultado)
+            {
+                if (result.Mensagem == "Unidade não encontrada.")
+                {
+                    return NotFound(ErroRespostaHelper.NaoEncontrado(result.Mensagem));
+                }
+
+                return Conflict(ErroRespostaHelper.Conflito(result.Mensagem));
+            }
+
+            return StatusCode(StatusCodes.Status201Created, result.Mensagem);
+        }
+
 
         // Buscar usuarios
         [Authorize(Roles = "ADMIN")]
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<UsuarioDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> BuscarUsuarios()
         {
             var usuarios = await _usuarioService.BuscarUsuarios();
@@ -85,6 +143,11 @@ namespace RaizesNordeste.Api.Controllers
         //Buscar usuario peo id
         [Authorize(Roles = "ADMIN")]
         [HttpGet("{id:long}")]
+        [ProducesResponseType(typeof(UsuarioDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> BuscarUsuarioPorId (long id)
         {
             var usuario = await _usuarioService.BuscarUsuarioPorId(id);

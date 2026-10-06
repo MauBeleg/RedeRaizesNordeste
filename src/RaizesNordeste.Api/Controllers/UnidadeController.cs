@@ -9,6 +9,7 @@ namespace RaizesNordeste.Api.Controllers
 {
     [ApiController]
     [Route("api/unidades")]
+    [Produces("application/json")]
     public class UnidadeController : ControllerBase
     {
 
@@ -24,6 +25,8 @@ namespace RaizesNordeste.Api.Controllers
 
         //Buscar Unidades - Cliente
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<UnidadeClienteDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> BuscarUnidadesAtivasCliente()
         {
             var unidades = await _unidadeService.BuscarUnidadesAtivas();
@@ -40,6 +43,9 @@ namespace RaizesNordeste.Api.Controllers
 
         //Buscar Unidade pelo id - Cliente
         [HttpGet("{id:long}")]
+        [ProducesResponseType(typeof(UnidadeClienteDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> BuscarUnidadePorIdCliente(long id)
         {
             var unidade = await _unidadeService.BuscarUnidadePorId(id);

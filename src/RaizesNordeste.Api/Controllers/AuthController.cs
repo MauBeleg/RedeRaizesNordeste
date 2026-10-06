@@ -7,6 +7,7 @@ namespace RaizesNordeste.Api.Controllers
 {
     [ApiController]
     [Route("api/auth")]
+    [Produces("application/json")]
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
@@ -15,9 +16,13 @@ namespace RaizesNordeste.Api.Controllers
         {
             _authService = authService;
         }
-    
-    
+
+
         [HttpPost("login")]
+        [ProducesResponseType(typeof(LoginRespostaDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login(
             [FromBody] LoginDTO dto)
         {
@@ -28,8 +33,11 @@ namespace RaizesNordeste.Api.Controllers
             {
                 return Unauthorized(ErroRespostaHelper.NaoAutenticado("Email ou senha incorretos. Tente novamente"));
             }
-    
-            return Ok(new {token});
+
+            return Ok(new LoginRespostaDTO
+            {
+                Token = token
+            }); 
     
     
         }

@@ -11,6 +11,7 @@ namespace RaizesNordeste.Api.Controllers
 
     [ApiController]
     [Route("api/unidades/{unidadeId:long}/cardapio")]
+    [Produces("application/json")]
     public class CardapioController : ControllerBase
     {
         private readonly CardapioService _cardapioService;
@@ -23,6 +24,9 @@ namespace RaizesNordeste.Api.Controllers
 
         //Buscar cadrapio da unidade
         [HttpGet]
+        [ProducesResponseType(typeof(CardapioDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> BuscarCardapioUnidade(long unidadeId)
         {
             var cardapio = await _cardapioService.BuscarCardapioporUnidade(unidadeId);

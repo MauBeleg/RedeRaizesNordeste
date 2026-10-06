@@ -8,6 +8,7 @@ namespace RaizesNordeste.Api.Controllers
 {
     [ApiController]
     [Route("api/consentimentos")]
+    [Produces("application/json")]
     [Authorize]
     public class ConsentimentosController : ControllerBase
     {
@@ -21,6 +22,11 @@ namespace RaizesNordeste.Api.Controllers
 
         [Authorize(Roles = "CLIENTE")]
         [HttpPost]
+        [ProducesResponseType(typeof(ConsentimentoRespostaDTO), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Registrar(ConsentimentoRequestDTO dto)
         {
             var usuarioIdClaim = User.FindFirst("UsuarioId")?.Value;
@@ -53,6 +59,10 @@ namespace RaizesNordeste.Api.Controllers
 
         [Authorize(Roles = "CLIENTE")]
         [HttpGet("meus")]
+        [ProducesResponseType(typeof(IEnumerable<ConsentimentoRespostaDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ListarMeus()
         {
             var usuarioIdClaim = User.FindFirst("UsuarioId")?.Value;
@@ -79,6 +89,10 @@ namespace RaizesNordeste.Api.Controllers
 
         [Authorize(Roles = "ADMIN")]
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<ConsentimentoAdminRespostaDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ErroRespostaDTO), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ListarTodos([FromQuery] long? usuarioId)
         {
             var consentimentos = await _consentimentoService.ListarTodos(usuarioId);
