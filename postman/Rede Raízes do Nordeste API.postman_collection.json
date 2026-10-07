@@ -2415,14 +2415,64 @@
           "response": []
         },
         {
-          "name": "CT-09 - Processar pagamento aprovado",
+          "name": "CT-09 - Processar pagamento recusado",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"CT09 - Pagamento retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT09 - Pagamento foi aprovado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"status\");\r\n    pm.expect(resposta.status).to.eql(\"Aprovado\");\r\n});"
+                  "pm.test(\"CT-09 - Pagamento recusado retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT-09 - Pagamento possui status Recusado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(\"Recusado\");\r\n});\r\n\r\npm.test(\"CT-09 - Gateway mock retorna código de transação\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.codigoTransacao).to.exist;\r\n    pm.expect(resposta.codigoTransacao).to.include(\"MOCK-\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"metodoPagamento\": \"Pix\",\r\n  \"aprovar\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/pagamentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "pagamentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-10 - Processar pagamento aprovado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT10 - Pagamento retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT10 - Pagamento foi aprovado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"status\");\r\n    pm.expect(resposta.status).to.eql(\"Aprovado\");\r\n});"
                 ]
               }
             }
@@ -2465,14 +2515,14 @@
           "response": []
         },
         {
-          "name": "CT-10 - Pagar pedido já pago",
+          "name": "CT-11 - Pagar pedido já pago",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"CT10 - Segundo pagamento retorna 409\", function () {\r\n    pm.response.to.have.status(409);\r\n});\r\n\r\npm.test(\"CT10 - API impede pagamento em estado incompatível\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(409);\r\n    pm.expect(resposta.erro).to.eql(\"Conflito\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                  "pm.test(\"CT11 - Segundo pagamento retorna 409\", function () {\r\n    pm.response.to.have.status(409);\r\n});\r\n\r\npm.test(\"CT11 - API impede pagamento em estado incompatível\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(409);\r\n    pm.expect(resposta.erro).to.eql(\"Conflito\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
                 ]
               }
             }
@@ -2515,14 +2565,14 @@
           "response": []
         },
         {
-          "name": "CT-11 - Alterar pedido para Em Preparo",
+          "name": "CT-12 - Alterar pedido para Em Preparo",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"CT11 - Alteração de status retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT11 - API confirma alteração do status\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.eql(\"Status do pedido alterado com sucesso\");\r\n});"
+                  "pm.test(\"CT12 - Alteração de status retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT12 - API confirma alteração do status\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.eql(\"Status do pedido alterado com sucesso\");\r\n});"
                 ]
               }
             }
@@ -2565,14 +2615,14 @@
           "response": []
         },
         {
-          "name": "CT-12 - Criar funcionário como Admin",
+          "name": "CT-13 - Criar funcionário como Admin",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"CT12 - Administrador cria funcionário com sucesso\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"CT12 - API confirma criação do funcionário\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.eql(\"Funcionário criado com sucesso.\");\r\n});"
+                  "pm.test(\"CT13 - Administrador cria funcionário com sucesso\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"CT13 - API confirma criação do funcionário\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.eql(\"Funcionário criado com sucesso.\");\r\n});"
                 ]
               }
             }
@@ -2614,14 +2664,14 @@
           "response": []
         },
         {
-          "name": "CT-13 - Cliente tentar listar usuários",
+          "name": "CT-14 - Cliente tentar listar usuários",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"CT13 - Cliente recebe 403 ao listar usuários\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"CT13 - Acesso administrativo é negado ao cliente\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                  "pm.test(\"CT14 - Cliente recebe 403 ao listar usuários\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"CT14 - Acesso administrativo é negado ao cliente\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
                 ]
               }
             }
@@ -2653,14 +2703,14 @@
           "response": []
         },
         {
-          "name": "CT-14 - Registrar consentimento",
+          "name": "CT-15 - Registrar consentimento",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"CT14 - Registro de consentimento retorna 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"CT14 - Consentimento foi registrado com sucesso\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"id\");\r\n    pm.expect(resposta.tipoConsentimento).to.eql(\"CAMPANHAS\");\r\n    pm.expect(resposta.aceito).to.eql(true);\r\n});"
+                  "pm.test(\"CT15 - Registro de consentimento retorna 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"CT15 - Consentimento foi registrado com sucesso\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"id\");\r\n    pm.expect(resposta.tipoConsentimento).to.eql(\"CAMPANHAS\");\r\n    pm.expect(resposta.aceito).to.eql(true);\r\n});"
                 ]
               }
             }
@@ -2701,14 +2751,14 @@
           "response": []
         },
         {
-          "name": "CT-15 - Listar auditorias como Admin",
+          "name": "CT-16 - Listar auditorias como Admin",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"CT15 - Administrador consulta auditorias com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT15 - Consulta retorna registros de auditoria\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n    pm.expect(resposta.length).to.be.above(0);\r\n});"
+                  "pm.test(\"CT16 - Administrador consulta auditorias com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT16 - Consulta retorna registros de auditoria\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n    pm.expect(resposta.length).to.be.above(0);\r\n});"
                 ]
               }
             }
@@ -2740,14 +2790,14 @@
           "response": []
         },
         {
-          "name": "CT-16 - Cliente tentar listar auditorias",
+          "name": "CT-17 - Cliente tentar listar auditorias",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"CT16 - Cliente recebe 403 ao consultar auditorias\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"CT16 - Acesso às auditorias é negado ao cliente\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                  "pm.test(\"CT17 - Cliente recebe 403 ao consultar auditorias\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"CT17 - Acesso às auditorias é negado ao cliente\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
                 ]
               }
             }
@@ -2777,6 +2827,215 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "CT-18 - Acessar auditorias sem token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT-18 - Requisição sem token retorna 401\", function () {\r\n    pm.response.to.have.status(401);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auditorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-19 - Criar pedido com estoque insuficiente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT-19 - Estoque insuficiente retorna 422\", function () {\r\n    pm.response.to.have.status(422);\r\n});\r\n\r\npm.test(\"CT-19 - Retorna erro de regra de negócio\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(422);\r\n    pm.expect(resposta.erro).to.eql(\"Regra de negócio não atendida\");\r\n    pm.expect(resposta.mensagem).to.eql(\"Estoque indisponível para o pedido\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"clienteId\": 9,\r\n    \"unidadeId\": 1,\r\n    \"canalPedido\": \"App\",\r\n    \"itens\": [\r\n        {\r\n            \"produtoId\": 4,\r\n            \"quantidade\": 61\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-20 - Validar auditoria após ação sensível",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT-20 - Consulta de auditoria retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT-20 - Pedido criado possui registro de auditoria\", function () {\r\n    const resposta = pm.response.json();\r\n    const pedidoId = Number(pm.collectionVariables.get(\"pedidoId\"));\r\n\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n    pm.expect(resposta.length).to.be.above(0);\r\n\r\n    const auditoria = resposta.find(function (item) {\r\n        return item.acao === \"PEDIDO_CRIADO\"\r\n            && item.entidade === \"PEDIDO\"\r\n            && Number(item.registroId) === pedidoId;\r\n    });\r\n\r\n    pm.expect(auditoria).to.exist;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auditorias?acao=PEDIDO_CRIADO&entidade=PEDIDO&registroId={{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ],
+              "query": [
+                {
+                  "key": "acao",
+                  "value": "PEDIDO_CRIADO"
+                },
+                {
+                  "key": "entidade",
+                  "value": "PEDIDO"
+                },
+                {
+                  "key": "registroId",
+                  "value": "{{pedidoId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-21 - Criar cliente sem CPF",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT-21 - CPF ausente retorna 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"CT-21 - Retorna erro de campo obrigatório\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(400);\r\n    pm.expect(resposta.erro).to.eql(\"Requisição inválida\");\r\n    pm.expect(resposta.mensagem).to.eql(\"O CPF deve ser informado.\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Mariana Alves\",\r\n    \"email\": \"mariana.alves5@exemplo.com\",\r\n    \"senha\": \"teste123\",\r\n    \"dataNascimento\": \"1994-08-17\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-22 - Criar cliente com CPF inválido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"CPF inválido foi rejeitado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(400);\r\n    pm.expect(resposta.erro).to.eql(\"Requisição inválida\");\r\n    pm.expect(resposta.mensagem).to.eql(\"CPF inválido.\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Mariana Alves\",\r\n    \"email\": \"mariana.alves3@exemplo.com\",\r\n    \"senha\": \"teste123\",\r\n    \"cpf\": \"12345\",\r\n    \"dataNascimento\": \"1994-08-17\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }
@@ -2785,10 +3044,6 @@
     {
       "key": "baseUrl",
       "value": "https://localhost:7111"
-    },
-    {
-      "key": "tokenCliente",
-      "secret": true
     },
     {
       "key": "tokenFuncionario",
@@ -2817,6 +3072,10 @@
     {
       "key": "produtoId",
       "value": "1"
+    },
+    {
+      "key": "tokenCliente",
+      "secret": true
     }
   ]
 }
