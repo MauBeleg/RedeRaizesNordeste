@@ -1,0 +1,2822 @@
+{
+  "info": {
+    "_postman_id": "7e978337-a952-45f8-b979-24c85cfcf930",
+    "name": "Rede Raízes do Nordeste API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47452454",
+    "_collection_link": "https://go.postman.co/collection/47452454-7e978337-a952-45f8-b979-24c85cfcf930?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "01 - Autenticação",
+      "item": [
+        {
+          "name": "Login Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Token retornado\", function () {\r\n    const resposta = pm.response.json();\r\n    pm.expect(resposta.token).to.be.a(\"string\").and.not.empty;\r\n});\r\n\r\nconst resposta = pm.response.json();\r\npm.collectionVariables.set(\"tokenCliente\", resposta.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"ana.souza@demo.local\",\r\n  \"senha\": \"Cliente@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Cliente 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Token retornado\", function () {\r\n    const resposta = pm.response.json();\r\n    pm.expect(resposta.token).to.be.a(\"string\").and.not.empty;\r\n});\r\n\r\nconst resposta = pm.response.json();\r\npm.collectionVariables.set(\"tokenCliente2\", resposta.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"carlos.lima@demo.local\",\r\n  \"senha\": \"Cliente@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Funcionário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const resposta = pm.response.json();\r\n\r\npm.collectionVariables.set(\"tokenFuncionario\", resposta.token);\r\n\r\npm.test(\"Login do funcionário realizado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Resposta contém token JWT\", function () {\r\n    pm.expect(resposta.token).to.exist;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"rafael.oliveira@raizes.local\",\r\n  \"senha\": \"Funcionario@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login realizado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst resposta = pm.response.json();\r\n\r\npm.expect(resposta).to.have.property(\"token\");\r\n\r\npm.collectionVariables.set(\"tokenAdmin\", resposta.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"admin@raizes.local\",\r\n  \"senha\": \"Admin@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Unidades e Cardápio",
+      "item": [
+        {
+          "name": "Listar Unidades",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Unidades retornadas com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Lista possui unidades\", function () {\r\n    const resposta = pm.response.json();\r\n    pm.expect(resposta).to.be.an(\"array\").that.is.not.empty;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/unidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "unidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar Cardápio da Unidade",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cardápio retornado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Cardápio possui produtos\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.produtos).to.be.an(\"array\");\r\n    pm.expect(resposta.produtos.length).to.be.greaterThan(0);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/unidades/{{unidadeId}}/cardapio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "unidades",
+                "{{unidadeId}}",
+                "cardapio"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Unidade por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Unidade retornada com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Unidade retornada possui dados\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.id).to.eql(\r\n        Number(pm.collectionVariables.get(\"unidadeId\"))\r\n    );\r\n\r\n    pm.expect(resposta.nome).to.be.a(\"string\").and.not.empty;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/unidades/{{unidadeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "unidades",
+                "{{unidadeId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Pedidos",
+      "item": [
+        {
+          "name": "Criar Pedido (Cliente)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Pedido criado com sucesso\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Pedido criado aguardando pagamento\", function () {\r\n    const resposta = pm.response.json();\r\n    pm.expect(resposta.status).to.eql(\"AguardandoPagamento\");\r\n});\r\n\r\npm.test(\"Pedido possui valor total\", function () {\r\n    const resposta = pm.response.json();\r\n    pm.expect(resposta.valorTotal).to.be.above(0);\r\n});\r\n\r\nconst resposta = pm.response.json();\r\n\r\nif (pm.response.code === 201) {\r\n    const resposta = pm.response.json();\r\n\r\n    if (resposta.id) {\r\n        pm.collectionVariables.set(\"pedidoId\", resposta.id);\r\n    }\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"clienteId\": 9,\r\n  \"unidadeId\": {{unidadeId}},\r\n  \"canalPedido\": \"App\",\r\n  \"itens\": [\r\n    {\r\n      \"produtoId\": 2,\r\n      \"quantidade\": 1\r\n    },\r\n    {\r\n      \"produtoId\": 4,\r\n      \"quantidade\": 1\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Pedido (Funcionário)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Funcionário criou o pedido com sucesso\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.id).to.be.a(\"number\");\r\n\r\n    pm.collectionVariables.set(\r\n        \"pedidoFuncionarioId\",\r\n        resposta.id\r\n    );\r\n});\r\n\r\npm.test(\"Pedido foi criado para o cliente informado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.cliente).to.eql(\"Carlos Lima\");\r\n    pm.expect(resposta.unidade).to.eql(\"Raízes do Nordeste - Recife\");\r\n    pm.expect(resposta.canalPedido).to.eql(\"Balcao\");\r\n    pm.expect(resposta.status).to.eql(\"AguardandoPagamento\");\r\n    pm.expect(Number(resposta.valorTotal)).to.eql(24.90);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenFuncionario}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"clienteId\": 10,\r\n    \"unidadeId\": 1,\r\n    \"canalPedido\": \"Balcao\",\r\n    \"itens\": [\r\n        {\r\n            \"produtoId\": 3,\r\n            \"quantidade\": 1\r\n        },\r\n        {\r\n            \"produtoId\": 11,\r\n            \"quantidade\": 1\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Alterar Status - Em Preparo (Funcionário)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Funcionário alterou pedido para EmPreparo\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Status alterado com sucesso\", function () {\r\n    pm.expect(pm.response.text())\r\n        .to.include(\"Status do pedido alterado com sucesso\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenFuncionario}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": \"EmPreparo\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Alterar Status - Pronto (Funcionário)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Funcionário alterou pedido para Pronto\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Status alterado com sucesso\", function () {\r\n    pm.expect(pm.response.text())\r\n        .to.include(\"Status do pedido alterado com sucesso\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenFuncionario}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"Pronto\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Alterar Status - Entregue (Funcionário)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Funcionário alterou pedido para Entregue\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Status alterado com sucesso\", function () {\r\n    pm.expect(pm.response.text())\r\n        .to.include(\"Status do pedido alterado com sucesso\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenFuncionario}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": \"Entregue\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Pedidos (Cliente)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Retorna uma lista de pedidos\", function () {\r\n    const resposta = pm.response.json();\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Pedidos possuem estrutura esperada\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    resposta.forEach(function (pedido) {\r\n        pm.expect(pedido).to.have.property(\"id\");\r\n        pm.expect(pedido).to.have.property(\"cliente\");\r\n        pm.expect(pedido).to.have.property(\"unidade\");\r\n        pm.expect(pedido).to.have.property(\"canalPedido\");\r\n        pm.expect(pedido).to.have.property(\"status\");\r\n        pm.expect(pedido).to.have.property(\"itens\");\r\n    });\r\n});\r\n\r\n\r\npm.test(\"Cliente visualiza apenas os próprios pedidos\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    resposta.forEach(function (pedido) {\r\n        pm.expect(pedido.cliente).to.eql(\"Ana Souza\");\r\n    });\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ],
+              "query": [
+                {
+                  "key": "canalPedido",
+                  "value": "App",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "Entregue",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Pedidos da Unidade (Funcionário)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Retorna uma lista de pedidos\", function () {\r\n    const resposta = pm.response.json();\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Pedidos possuem estrutura esperada\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    resposta.forEach(function (pedido) {\r\n        pm.expect(pedido).to.have.property(\"id\");\r\n        pm.expect(pedido).to.have.property(\"cliente\");\r\n        pm.expect(pedido).to.have.property(\"unidade\");\r\n        pm.expect(pedido).to.have.property(\"canalPedido\");\r\n        pm.expect(pedido).to.have.property(\"status\");\r\n        pm.expect(pedido).to.have.property(\"itens\");\r\n    });\r\n});\r\n\r\npm.test(\"Funcionário visualiza apenas pedidos da própria unidade\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    resposta.forEach(function (pedido) {\r\n        pm.expect(pedido.unidade).to.eql(\"Raízes do Nordeste - Recife\");\r\n    });\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenFuncionario}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ],
+              "query": [
+                {
+                  "key": "canalPedido",
+                  "value": "App",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "Entregue",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Pedidos (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Retorna uma lista de pedidos\", function () {\r\n    const resposta = pm.response.json();\r\n    pm.expect(resposta).to.be.an(\"array\").that.is.not.empty;\r\n});\r\n\r\npm.test(\"Pedidos possuem estrutura esperada\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    resposta.forEach(function (pedido) {\r\n        pm.expect(pedido).to.have.property(\"id\");\r\n        pm.expect(pedido).to.have.property(\"cliente\");\r\n        pm.expect(pedido).to.have.property(\"unidade\");\r\n        pm.expect(pedido).to.have.property(\"canalPedido\");\r\n        pm.expect(pedido).to.have.property(\"status\");\r\n        pm.expect(pedido).to.have.property(\"itens\");\r\n    });\r\n});\r\n\r\npm.test(\"Administrador visualiza pedidos de múltiplas unidades\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    const unidades = [...new Set(\r\n        resposta.map(function (pedido) {\r\n            return pedido.unidade;\r\n        })\r\n    )];\r\n\r\n    pm.expect(unidades.length).to.be.greaterThan(1);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ],
+              "query": [
+                {
+                  "key": "canalPedido",
+                  "value": "App",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "Entregue",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar Meu Pedido (Cliente)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Pedido consultado corresponde ao pedido criado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.id).to.eql(\r\n        Number(pm.collectionVariables.get(\"pedidoId\"))\r\n    );\r\n});\r\n\r\npm.test(\"Pedido pertence ao cliente autenticado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.cliente).to.eql(\"Ana Souza\");\r\n});\r\n\r\npm.test(\"Pedido possui estrutura esperada\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"id\");\r\n    pm.expect(resposta).to.have.property(\"cliente\");\r\n    pm.expect(resposta).to.have.property(\"unidade\");\r\n    pm.expect(resposta).to.have.property(\"canalPedido\");\r\n    pm.expect(resposta).to.have.property(\"subtotal\");\r\n    pm.expect(resposta).to.have.property(\"desconto\");\r\n    pm.expect(resposta).to.have.property(\"valorTotal\");\r\n    pm.expect(resposta).to.have.property(\"status\");\r\n    pm.expect(resposta).to.have.property(\"dataCriacao\");\r\n    pm.expect(resposta).to.have.property(\"itens\");\r\n\r\n    pm.expect(resposta.itens).to.be.an(\"array\").that.is.not.empty;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar Meu Pedido (Erro - Cliente não é o que fez o pedido)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Outro cliente não consegue acessar o pedido\", function () {\r\n    pm.expect(pm.response.code).to.eql(403);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente2}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar Pedido da Unidade (Funcionário)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Funcionário acessa pedido da própria unidade\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.id).to.eql(\r\n        Number(pm.collectionVariables.get(\"pedidoId\"))\r\n    );\r\n\r\n    pm.expect(resposta.unidade)\r\n        .to.eql(\"Raízes do Nordeste - Recife\");\r\n});\r\n\r\npm.test(\"Pedido possui estrutura esperada\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"id\");\r\n    pm.expect(resposta).to.have.property(\"cliente\");\r\n    pm.expect(resposta).to.have.property(\"unidade\");\r\n    pm.expect(resposta).to.have.property(\"canalPedido\");\r\n    pm.expect(resposta).to.have.property(\"status\");\r\n    pm.expect(resposta).to.have.property(\"itens\");\r\n\r\n    pm.expect(resposta.itens)\r\n        .to.be.an(\"array\")\r\n        .that.is.not.empty;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenFuncionario}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar Pedido (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Administrador consegue consultar o pedido\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.id).to.eql(\r\n        Number(pm.collectionVariables.get(\"pedidoId\"))\r\n    );\r\n});\r\n\r\npm.test(\"Pedido possui estrutura esperada\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"id\");\r\n    pm.expect(resposta).to.have.property(\"cliente\");\r\n    pm.expect(resposta).to.have.property(\"unidade\");\r\n    pm.expect(resposta).to.have.property(\"canalPedido\");\r\n    pm.expect(resposta).to.have.property(\"subtotal\");\r\n    pm.expect(resposta).to.have.property(\"desconto\");\r\n    pm.expect(resposta).to.have.property(\"valorTotal\");\r\n    pm.expect(resposta).to.have.property(\"status\");\r\n    pm.expect(resposta).to.have.property(\"dataCriacao\");\r\n    pm.expect(resposta).to.have.property(\"itens\");\r\n\r\n    pm.expect(resposta.itens)\r\n        .to.be.an(\"array\")\r\n        .that.is.not.empty;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Pagamentos",
+      "item": [
+        {
+          "name": "Pagamento Recusado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Pagamento foi recusado pelo gateway\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(\"Recusado\");\r\n});\r\n\r\npm.test(\"Gateway retornou código de transação\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.codigoTransacao).to.exist;\r\n    pm.expect(resposta.codigoTransacao).to.include(\"MOCK-\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"metodoPagamento\": \"Pix\",\r\n  \"aprovar\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/pagamentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "pagamentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pagamento Aprovado - Nova Tentativa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Pagamento processado com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Pagamento foi aprovado pelo gateway\", function () {\r\n    const resposta = pm.response.json();\r\n    pm.expect(resposta.status).to.eql(\"Aprovado\");\r\n});\r\n\r\npm.test(\"Gateway retornou código de transação\", function () {\r\n    const resposta = pm.response.json();\r\n    pm.expect(resposta.codigoTransacao).to.exist;\r\n    pm.expect(resposta.codigoTransacao).to.include(\"MOCK-\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"metodoPagamento\": \"Pix\",\r\n  \"aprovar\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/pagamentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "pagamentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pagamento Inválido - Pedido já pago",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", function () {\r\n    pm.response.to.have.status(409);\r\n});\r\n\r\npm.test(\"Não permite novo pagamento para pedido já pago\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"status\", 409);\r\n    pm.expect(resposta).to.have.property(\"erro\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"metodoPagamento\": \"Pix\",\r\n    \"aprovar\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/pagamentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "pagamentos"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - Usuários",
+      "item": [
+        {
+          "name": "Criar Cliente - Sucesso",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Cliente criado com sucesso\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.eql(\"Usuário criado com sucesso.\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Mariana Alves\",\r\n    \"email\": \"mariana.alves@exemplo.com\",\r\n    \"senha\": \"teste123\",\r\n    \"cpf\": \"123.456.789-01\",\r\n    \"dataNascimento\": \"1994-08-17\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Cliente - E-mail Duplicado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", function () {\r\n    pm.response.to.have.status(409);\r\n});\r\n\r\npm.test(\"Erro segue o padrão da API\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(409);\r\n    pm.expect(resposta.erro).to.eql(\"Conflito\");\r\n    pm.expect(resposta.mensagem)\r\n        .to.eql(\"Já existe um usuário cadastrado com este e-mail.\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Mariana Alves\",\r\n    \"email\": \"mariana.alves@exemplo.com\",\r\n    \"senha\": \"teste123\",\r\n    \"cpf\": \"123.456.789-01\",\r\n    \"dataNascimento\": \"1994-08-17\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Cliente - CPF Duplicado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", function () {\r\n    pm.response.to.have.status(409);\r\n});\r\n\r\npm.test(\"Erro segue o padrão da API\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(409);\r\n    pm.expect(resposta.erro).to.eql(\"Conflito\");\r\n    pm.expect(resposta.mensagem)\r\n        .to.eql(\"Já existe um usuário cadastrado com este e-mail.\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Mariana Alves\",\r\n    \"email\": \"mariana.alves2@exemplo.com\",\r\n    \"senha\": \"teste123\",\r\n    \"cpf\": \"123.456.789-01\",\r\n    \"dataNascimento\": \"1994-08-17\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Cliente - CPF Inválido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"CPF inválido foi rejeitado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(400);\r\n    pm.expect(resposta.erro).to.eql(\"Requisição inválida\");\r\n    pm.expect(resposta.mensagem).to.eql(\"CPF inválido.\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Mariana Alves\",\r\n    \"email\": \"mariana.alves3@exemplo.com\",\r\n    \"senha\": \"teste123\",\r\n    \"cpf\": \"12345\",\r\n    \"dataNascimento\": \"1994-08-17\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Cliente - Data Nascimento Futura",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Data de nascimento futura foi rejeitada\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(400);\r\n    pm.expect(resposta.erro).to.eql(\"Requisição inválida\");\r\n    pm.expect(resposta.mensagem)\r\n        .to.eql(\"A data de nascimento não pode ser futura.\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Mariana Alves\",\r\n    \"email\": \"mariana.alves4@exemplo.com\",\r\n    \"senha\": \"teste123\",\r\n    \"cpf\": \"123.456.789-01\",\r\n    \"dataNascimento\": \"2030-08-17\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Cliente - CPF Ausente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Erro segue o padrão da API\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(400);\r\n    pm.expect(resposta.erro).to.eql(\"Requisição inválida\");\r\n    pm.expect(resposta.mensagem)\r\n        .to.eql(\"O CPF deve ser informado.\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Mariana Alves\",\r\n    \"email\": \"mariana.alves5@exemplo.com\",\r\n    \"senha\": \"teste123\",\r\n    \"dataNascimento\": \"1994-08-17\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Criar Funcionário (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Funcionário criado com sucesso\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.eql(\"Funcionário criado com sucesso.\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Beatriz Nascimento\",\r\n  \"email\": \"beatriz.nascimento@demo.local\",\r\n  \"senha\": \"Beatriz@123\",\r\n  \"cpf\": \"11144477735\",\r\n  \"dataNascimento\": \"1998-08-15\",\r\n  \"unidadeId\": 1,\r\n  \"setor\": \"Atendimento\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/funcionarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "funcionarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Usuário por ID (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Retorna o usuário solicitado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"id\");\r\n    pm.expect(resposta).to.have.property(\"nome\");\r\n    pm.expect(resposta).to.have.property(\"email\");\r\n    pm.expect(resposta).to.have.property(\"perfilId\");\r\n    pm.expect(resposta).to.have.property(\"ativo\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Usuário Inexistente (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Usuário inexistente retorna erro esperado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(404);\r\n    pm.expect(resposta.erro).to.eql(\"Recurso não encontrado\");\r\n    pm.expect(resposta.mensagem).to.eql(\"Usuário não encontrado\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Usuário (Cliente sem Permissão)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Erro segue o padrão da API\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Usuários (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Retorna uma lista de usuários\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n    pm.expect(resposta.length).to.be.above(0);\r\n});\r\n\r\npm.test(\"Usuários possuem os campos esperados\", function () {\r\n    const resposta = pm.response.json();\r\n    const usuario = resposta[0];\r\n\r\n    pm.expect(usuario).to.have.property(\"id\");\r\n    pm.expect(usuario).to.have.property(\"nome\");\r\n    pm.expect(usuario).to.have.property(\"email\");\r\n    pm.expect(usuario).to.have.property(\"perfilId\");\r\n    pm.expect(usuario).to.have.property(\"ativo\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Usuários (Cliente sem Permissão)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Erro segue o padrão da API\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06 - Auditorias",
+      "item": [
+        {
+          "name": "Listar Auditorias - Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Retorna uma lista de auditorias\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Auditorias retornadas possuem os campos esperados\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    if (resposta.length > 0) {\r\n        const auditoria = resposta[0];\r\n\r\n        pm.expect(auditoria).to.have.property(\"id\");\r\n        pm.expect(auditoria).to.have.property(\"usuarioId\");\r\n        pm.expect(auditoria).to.have.property(\"usuario\");\r\n        pm.expect(auditoria).to.have.property(\"acao\");\r\n        pm.expect(auditoria).to.have.property(\"entidade\");\r\n        pm.expect(auditoria).to.have.property(\"registroId\");\r\n        pm.expect(auditoria).to.have.property(\"detalhes\");\r\n        pm.expect(auditoria).to.have.property(\"dataCriacao\");\r\n    }\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auditorias?registroId=11",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ],
+              "query": [
+                {
+                  "key": "usuarioId",
+                  "value": "3",
+                  "description": "filtra as auditorias pelo ID do usuário que executou a ação",
+                  "disabled": true
+                },
+                {
+                  "key": "acao",
+                  "value": "PEDIDO_CRIADO",
+                  "description": "filtra pelo tipo de ação auditada. Valores atualmente registrados: PEDIDO_CRIADO, PAGAMENTO_PROCESSADO e STATUS_ALTERADO",
+                  "disabled": true
+                },
+                {
+                  "key": "entidade",
+                  "value": "PEDIDO",
+                  "description": "filtra pela entidade relacionada à auditoria. Valores atualmente utilizados: PEDIDO e PAGAMENTO",
+                  "disabled": true
+                },
+                {
+                  "key": "registroId",
+                  "value": "11",
+                  "description": "filtra pelo ID do registro da entidade relacionada à auditoria"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Auditorias - Cliente Proibido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Cliente não possui permissão para consultar auditorias\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auditorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "07 - Consentimentos",
+      "item": [
+        {
+          "name": "Registrar Consentimento - Fidelização",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Consentimento foi registrado corretamente\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"id\");\r\n    pm.expect(resposta.tipoConsentimento).to.eql(\"FIDELIZACAO\");\r\n    pm.expect(resposta.aceito).to.eql(true);\r\n    pm.expect(resposta).to.have.property(\"dataCriacao\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"tipoConsentimento\": \"FIDELIZACAO\",\r\n    \"aceito\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/consentimentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "consentimentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Meus Consentimentos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Retorna uma lista de consentimentos\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n    pm.expect(resposta.length).to.be.above(0);\r\n});\r\n\r\npm.test(\"Consentimentos possuem os campos esperados\", function () {\r\n    const resposta = pm.response.json();\r\n    const consentimento = resposta[0];\r\n\r\n    pm.expect(consentimento).to.have.property(\"id\");\r\n    pm.expect(consentimento).to.have.property(\"tipoConsentimento\");\r\n    pm.expect(consentimento).to.have.property(\"aceito\");\r\n    pm.expect(consentimento).to.have.property(\"dataCriacao\");\r\n\r\n    pm.expect(consentimento).to.not.have.property(\"usuarioId\");\r\n    pm.expect(consentimento).to.not.have.property(\"usuario\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/consentimentos/meus",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "consentimentos",
+                "meus"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Consentimentos - Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Retorna consentimentos do usuário filtrado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n    pm.expect(resposta.length).to.be.above(0);\r\n\r\n    resposta.forEach(function (consentimento) {\r\n        pm.expect(consentimento.usuarioId).to.eql(9);\r\n    });\r\n});\r\n\r\npm.test(\"Resposta administrativa possui os campos esperados\", function () {\r\n    const resposta = pm.response.json();\r\n    const consentimento = resposta[0];\r\n\r\n    pm.expect(consentimento).to.have.property(\"id\");\r\n    pm.expect(consentimento).to.have.property(\"usuarioId\");\r\n    pm.expect(consentimento).to.have.property(\"usuario\");\r\n    pm.expect(consentimento).to.have.property(\"tipoConsentimento\");\r\n    pm.expect(consentimento).to.have.property(\"aceito\");\r\n    pm.expect(consentimento).to.have.property(\"dataCriacao\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/consentimentos?usuarioId=9",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "consentimentos"
+              ],
+              "query": [
+                {
+                  "key": "usuarioId",
+                  "value": "9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Consentimentos - Cliente Proibido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Cliente não possui permissão para listar consentimentos de usuários\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/consentimentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "consentimentos"
+              ],
+              "query": [
+                {
+                  "key": "usuarioId",
+                  "value": "5",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "08 - Erros e Autorizações",
+      "item": [
+        {
+          "name": "Login - Credenciais Inválidas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 401\", function () {\r\n    pm.response.to.have.status(401);\r\n});\r\n\r\npm.test(\"Credenciais inválidas não permitem autenticação\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(401);\r\n    pm.expect(resposta.erro).to.eql(\"Não autenticado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"ana.souza@demo.local\",\r\n    \"senha\": \"SenhaIncorreta123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cardápio - Unidade Inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Cardápio inexistente retorna erro padronizado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(404);\r\n    pm.expect(resposta.erro).to.eql(\"Recurso não encontrado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/unidades/999999/cardapio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "unidades",
+                "999999",
+                "cardapio"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pedido de Outro Cliente - Proibido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Cliente não pode consultar pedido de outro cliente\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente2}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pagamento - Pedido Já Pago",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", function () {\r\n    pm.response.to.have.status(409);\r\n});\r\n\r\npm.test(\"Pedido já pago não aceita novo pagamento\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(409);\r\n    pm.expect(resposta.erro).to.eql(\"Conflito\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"metodo\": \"Pix\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/pagamentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "pagamentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Usuários - Cliente Proibido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Cliente não possui permissão para listar usuários\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Auditorias - Cliente Proibido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 403\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Cliente não possui permissão para consultar auditorias\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auditorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "09 - Cenários de Teste",
+      "item": [
+        {
+          "name": "CT-01.1 → PREP-01 - Login Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT01 - Login válido retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT01 - Retorna token JWT\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"token\");\r\n    pm.expect(resposta.token).to.be.a(\"string\");\r\n    pm.expect(resposta.token.length).to.be.above(0);\r\n});\r\n\r\nif (pm.response.code === 200) {\r\n    const resposta = pm.response.json();\r\n\r\n    if (resposta.token) {\r\n        pm.collectionVariables.set(\"tokenCliente\", resposta.token);\r\n    }\r\n}\r\n\r\n\r\n\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"ana.souza@demo.local\",\r\n    \"senha\": \"Cliente@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-01.2 → PREP-02 - Login Cliente 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT01 - Login válido retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT01 - Retorna token JWT\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"token\");\r\n    pm.expect(resposta.token).to.be.a(\"string\");\r\n    pm.expect(resposta.token.length).to.be.above(0);\r\n});\r\n\r\nif (pm.response.code === 200) {\r\n    const resposta = pm.response.json();\r\n    pm.collectionVariables.set(\"tokenCliente2\", resposta.token);\r\n}\r\n\r\n\r\n\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"carlos.lima@demo.local\",\r\n    \"senha\": \"Cliente@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-01.3 → PREP-03 - Login Funcionário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT01 - Login válido retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT01 - Retorna token JWT\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"token\");\r\n    pm.expect(resposta.token).to.be.a(\"string\");\r\n    pm.expect(resposta.token.length).to.be.above(0);\r\n});\r\n\r\nif (pm.response.code === 200) {\r\n    const resposta = pm.response.json();\r\n    pm.collectionVariables.set(\"tokenFuncionario\", resposta.token);\r\n}\r\n\r\n\r\n\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"rafael.oliveira@raizes.local\",\r\n    \"senha\": \"Funcionario@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-01.4 → PREP-04 - Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT01 - Login válido retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT01 - Retorna token JWT\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"token\");\r\n    pm.expect(resposta.token).to.be.a(\"string\");\r\n    pm.expect(resposta.token.length).to.be.above(0);\r\n});\r\n\r\nif (pm.response.code === 200) {\r\n    const resposta = pm.response.json();\r\n    pm.collectionVariables.set(\"tokenAdmin\", resposta.token);\r\n}\r\n\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"admin@raizes.local\",\r\n    \"senha\": \"Admin@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-02 - Login com credenciais inválidas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT02 - Credenciais inválidas retornam 401\", function () {\r\n    pm.response.to.have.status(401);\r\n});\r\n\r\npm.test(\"CT02 - Retorna erro padronizado de autenticação\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(401);\r\n    pm.expect(resposta.erro).to.eql(\"Não autenticado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"ana.souza@demo.local\",\r\n    \"senha\": \"SenhaIncorreta@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-03 - Listar unidades ativas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT03 - Listagem de unidades retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT03 - Retorna unidades disponíveis\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n    pm.expect(resposta.length).to.be.above(0);\r\n\r\n    pm.expect(resposta[0]).to.have.property(\"id\");\r\n    pm.expect(resposta[0]).to.have.property(\"nome\");\r\n});\r\n\r\nif (pm.response.code === 200) {\r\n    const resposta = pm.response.json();\r\n\r\n    if (Array.isArray(resposta) && resposta.length > 0) {\r\n        pm.collectionVariables.set(\"unidadeId\", resposta[0].id);\r\n    }\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/unidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "unidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-04 - Consultar cardápio da unidade",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT04 - Cardápio da unidade retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT04 - Cardápio possui produtos\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"produtos\");\r\n    pm.expect(resposta.produtos).to.be.an(\"array\");\r\n    pm.expect(resposta.produtos.length).to.be.above(0);\r\n});\r\n\r\nif (pm.response.code === 200) {\r\n    const resposta = pm.response.json();\r\n\r\n    if (\r\n        resposta.produtos &&\r\n        Array.isArray(resposta.produtos) &&\r\n        resposta.produtos.length > 0\r\n    ) {\r\n        pm.collectionVariables.set(\r\n            \"produtoId\",\r\n            resposta.produtos[0].id\r\n        );\r\n    }\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/unidades/{{unidadeId}}/cardapio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "unidades",
+                "{{unidadeId}}",
+                "cardapio"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-05 - Consultar cardápio de unidade inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT05 - Unidade inexistente retorna 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"CT05 - Retorna erro padronizado de recurso não encontrado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(404);\r\n    pm.expect(resposta.erro).to.eql(\"Recurso não encontrado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/unidades/999999/cardapio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "unidades",
+                "999999",
+                "cardapio"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-06 - Criar pedido válido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT06 - Criação de pedido retorna 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"CT06 - Pedido criado possui identificador\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"id\");\r\n    pm.expect(resposta.id).to.be.a(\"number\");\r\n    pm.expect(resposta.id).to.be.above(0);\r\n});\r\n\r\nif (pm.response.code === 201) {\r\n    const resposta = pm.response.json();\r\n\r\n    if (resposta.id) {\r\n        pm.collectionVariables.set(\"pedidoId\", resposta.id);\r\n    }\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"clienteId\": 9,\r\n    \"unidadeId\": {{unidadeId}},\r\n    \"canalPedido\": \"App\",\r\n    \"itens\": [\r\n        {\r\n            \"produtoId\": {{produtoId}},\r\n            \"quantidade\": 1\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-07 - Consultar o próprio pedido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT07 - Consulta do próprio pedido retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT07 - Retorna o pedido criado no CT06\", function () {\r\n    const resposta = pm.response.json();\r\n    const pedidoId = Number(pm.collectionVariables.get(\"pedidoId\"));\r\n\r\n    pm.expect(resposta).to.have.property(\"id\");\r\n    pm.expect(resposta.id).to.eql(pedidoId);\r\n    pm.expect(resposta).to.have.property(\"status\");\r\n    pm.expect(resposta).to.have.property(\"itens\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-08 - Consultar pedido de outro cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT08 - Outro cliente recebe 403\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"CT08 - Acesso ao pedido de outro cliente é negado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente2}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-09 - Processar pagamento aprovado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT09 - Pagamento retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT09 - Pagamento foi aprovado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"status\");\r\n    pm.expect(resposta.status).to.eql(\"Aprovado\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"metodo\": \"Pix\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/pagamentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "pagamentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-10 - Pagar pedido já pago",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT10 - Segundo pagamento retorna 409\", function () {\r\n    pm.response.to.have.status(409);\r\n});\r\n\r\npm.test(\"CT10 - API impede pagamento em estado incompatível\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(409);\r\n    pm.expect(resposta.erro).to.eql(\"Conflito\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"metodo\": \"Pix\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/pagamentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "pagamentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-11 - Alterar pedido para Em Preparo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT11 - Alteração de status retorna 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT11 - API confirma alteração do status\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.eql(\"Status do pedido alterado com sucesso\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenFuncionario}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": \"EmPreparo\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/{{pedidoId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos",
+                "{{pedidoId}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-12 - Criar funcionário como Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT12 - Administrador cria funcionário com sucesso\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"CT12 - API confirma criação do funcionário\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.eql(\"Funcionário criado com sucesso.\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\": \"Funcionario Teste Postman\",\r\n    \"email\": \"funcionario.postman@demo.local\",\r\n    \"senha\": \"Funcionario@123\",\r\n    \"cpf\": \"00000000011\",\r\n    \"dataNascimento\": \"1997-04-10\",\r\n    \"unidadeId\": 1,\r\n    \"setor\": \"Atendimento\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/funcionarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "funcionarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-13 - Cliente tentar listar usuários",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT13 - Cliente recebe 403 ao listar usuários\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"CT13 - Acesso administrativo é negado ao cliente\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-14 - Registrar consentimento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT14 - Registro de consentimento retorna 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"CT14 - Consentimento foi registrado com sucesso\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"id\");\r\n    pm.expect(resposta.tipoConsentimento).to.eql(\"CAMPANHAS\");\r\n    pm.expect(resposta.aceito).to.eql(true);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"tipoConsentimento\": \"CAMPANHAS\",\r\n    \"aceito\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/consentimentos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "consentimentos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-15 - Listar auditorias como Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT15 - Administrador consulta auditorias com sucesso\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"CT15 - Consulta retorna registros de auditoria\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.be.an(\"array\");\r\n    pm.expect(resposta.length).to.be.above(0);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auditorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CT-16 - Cliente tentar listar auditorias",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT16 - Cliente recebe 403 ao consultar auditorias\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"CT16 - Acesso às auditorias é negado ao cliente\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta.status).to.eql(403);\r\n    pm.expect(resposta.erro).to.eql(\"Acesso negado\");\r\n    pm.expect(resposta).to.have.property(\"mensagem\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auditorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auditorias"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:7111"
+    },
+    {
+      "key": "tokenCliente",
+      "secret": true
+    },
+    {
+      "key": "tokenFuncionario",
+      "secret": true
+    },
+    {
+      "key": "tokenAdmin",
+      "secret": true
+    },
+    {
+      "key": "unidadeId",
+      "value": "1"
+    },
+    {
+      "key": "pedidoId",
+      "value": ""
+    },
+    {
+      "key": "tokenCliente2",
+      "secret": true
+    },
+    {
+      "key": "pedidoFuncionarioId",
+      "value": ""
+    },
+    {
+      "key": "produtoId",
+      "value": "1"
+    }
+  ]
+}
