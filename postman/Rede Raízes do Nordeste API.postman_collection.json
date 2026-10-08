@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "7e978337-a952-45f8-b979-24c85cfcf930",
+    "_postman_id": "975f7192-fa18-43f6-9678-b6465ffcf87a",
     "name": "Rede Raízes do Nordeste API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "47452454",
-    "_collection_link": "https://go.postman.co/collection/47452454-7e978337-a952-45f8-b979-24c85cfcf930?source=collection_link"
+    "_collection_link": "https://go.postman.co/collection/47452454-975f7192-fa18-43f6-9678-b6465ffcf87a?source=collection_link"
   },
   "item": [
     {
@@ -1688,7 +1688,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/consentimentos?usuarioId=9",
+              "raw": "{{baseUrl}}/api/consentimentos",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -1699,7 +1699,8 @@
               "query": [
                 {
                   "key": "usuarioId",
-                  "value": "9"
+                  "value": "9",
+                  "disabled": true
                 }
               ]
             }
@@ -2035,7 +2036,8 @@
                 "auth",
                 "login"
               ]
-            }
+            },
+            "description": "**Objetivo:** autenticar um usuário com perfil Cliente para utilização nos cenários de teste posteriores.\n\n**Pré-condições:** API e banco de dados em execução; usuário Cliente previamente cadastrado, ativo e com credenciais válidas.\n\n**Entrada:** POST de autenticação, contendo as credenciais do cliente.\n\n**Resultado esperado:** HTTP 200, com retorno de um token JWT válido.\n\n**Dependências:** nenhuma requisição anterior.\n\n**Evidência:** CT-01.1 — PREP-01 — Login Cliente, na pasta 09 da coleção Postman."
           },
           "response": []
         },
@@ -2074,7 +2076,8 @@
                 "auth",
                 "login"
               ]
-            }
+            },
+            "description": "**Objetivo:** autenticar um segundo cliente para verificar as restrições de acesso a pedidos pertencentes a outros usuários.\n\n**Pré-condições:** segundo cliente previamente cadastrado e com credenciais válidas.\n\n**Entrada:** POST de autenticação, contendo as credenciais do segundo cliente.\n\n**Resultado esperado:** HTTP 200, com token JWT válido associado ao segundo usuário.\n\n**Dependências:** nenhuma requisição anterior.\n\n**Evidência:** CT-01.2 — PREP-02 — Login Cliente 2."
           },
           "response": []
         },
@@ -2113,7 +2116,8 @@
                 "auth",
                 "login"
               ]
-            }
+            },
+            "description": "**Objetivo:** autenticar um funcionário para executar operações permitidas ao seu perfil, especialmente o gerenciamento de pedidos.\n\n**Pré-condições:** funcionário cadastrado, ativo e associado a uma unidade válida.\n\n**Entrada:** POST de autenticação, com credenciais do funcionário.\n\n**Resultado esperado:** HTTP 200, com token JWT válido para o perfil Funcionário.\n\n**Dependências:** nenhuma requisição anterior.\n\n**Evidência:** CT-01.3 — PREP-03 — Login Funcionário."
           },
           "response": []
         },
@@ -2152,7 +2156,8 @@
                 "auth",
                 "login"
               ]
-            }
+            },
+            "description": "**Objetivo:** autenticar um administrador para executar operações administrativas e consultar registros de auditoria.\n\n**Pré-condições:** usuário com perfil Administrador previamente cadastrado e com credenciais válidas.\n\n**Entrada:** POST de autenticação, com credenciais do administrador.\n\n**Resultado esperado:** HTTP 200, com token JWT válido para o perfil Administrador.\n\n**Dependências:** nenhuma requisição anterior.\n\n**Evidência:** CT-01.4 — PREP-04 — Login Admin."
           },
           "response": []
         },
@@ -2191,7 +2196,8 @@
                 "auth",
                 "login"
               ]
-            }
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se a API impede a autenticação com credenciais incorretas.\n\n**Pré-condições:** API em execução e endpoint de autenticação disponível.\n\n**Entrada:** POST de autenticação, informando credenciais inválidas.\n\n**Resultado esperado:** HTTP 401 — Unauthorized, sem emissão de token JWT.\n\n**Dependências:** nenhuma.\n\n**Evidência:** CT-02 — Login com credenciais inválidas."
           },
           "response": []
         },
@@ -2220,7 +2226,8 @@
                 "api",
                 "unidades"
               ]
-            }
+            },
+            "description": "**Tipo:** Positivo.\n\n**Objetivo:** verificar se a API permite consultar as unidades ativas da rede.\n\n**Pré-condições:** banco de dados configurado e unidades ativas cadastradas.\n\n**Entrada:** GET de listagem de unidades ativas.\n\n**Resultado esperado:** HTTP 200 — OK, com uma coleção de unidades ativas e suas informações relevantes.\n\n**Dependências:** dados iniciais de unidades disponíveis.\n\n**Evidência:** CT-03 — Listar unidades ativas."
           },
           "response": []
         },
@@ -2251,7 +2258,8 @@
                 "{{unidadeId}}",
                 "cardapio"
               ]
-            }
+            },
+            "description": "**Tipo:** Positivo.\n\n**Objetivo:** verificar se a API retorna o cardápio de uma unidade existente, considerando os produtos disponíveis.\n\n**Pré-condições:** unidade ativa cadastrada, cardápio associado e produtos disponíveis.\n\n**Entrada:** GET de consulta ao cardápio, informando o identificador de uma unidade válida.\n\n**Resultado esperado:** HTTP 200 — OK, com os produtos disponíveis no cardápio da unidade consultada.\n\n**Dependências:** cadastro da unidade, produtos, cardápio e informações de disponibilidade.\n\n**Evidência:** CT-04 — Consultar cardápio da unidade."
           },
           "response": []
         },
@@ -2282,7 +2290,8 @@
                 "999999",
                 "cardapio"
               ]
-            }
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se a API trata corretamente a tentativa de consultar o cardápio de uma unidade inexistente.\n\n**Pré-condições:** API em execução e identificador de unidade que não exista no banco de dados.\n\n**Entrada:** GET de consulta ao cardápio, utilizando um identificador de unidade inexistente.\n\n**Resultado esperado:** HTTP 404 — Not Found, caso esse seja o contrato implementado, acompanhado de resposta de erro e sem retorno de cardápio válido.\n\n**Dependências:** nenhuma requisição anterior.\n\n**Evidência:** CT-05 — Consultar cardápio de unidade inexistente."
           },
           "response": []
         },
@@ -2330,7 +2339,8 @@
                 "api",
                 "pedidos"
               ]
-            }
+            },
+            "description": "**Tipo:** Positivo.\n\n**Objetivo:** verificar se um cliente autenticado consegue criar um pedido com produtos disponíveis em uma unidade válida.\n\n**Pré-condições:** cliente autenticado, unidade ativa, produtos cadastrados e estoque suficiente para atender ao pedido.\n\n**Entrada:** POST de criação de pedido, contendo unidade, canal do pedido, produtos e quantidades válidas.\n\n**Resultado esperado:** requisição bem-sucedida, com criação do pedido, identificador gerado e status inicial correspondente ao fluxo de pagamento da aplicação. Conferir o código HTTP exato na execução.\n\n**Dependências:** CT-01.1 — Login Cliente; dados válidos de unidade, produto e estoque.\n\n**Evidência:** CT-06 — Criar pedido válido."
           },
           "response": []
         },
@@ -2370,7 +2380,8 @@
                 "pedidos",
                 "{{pedidoId}}"
               ]
-            }
+            },
+            "description": "**Tipo:** Positivo.\n\n**Objetivo:** verificar se o cliente consegue consultar um pedido criado em seu nome.\n\n**Pré-condições:** cliente autenticado e pedido previamente criado, pertencente ao mesmo cliente.\n\n**Entrada:** GET de consulta ao pedido, utilizando seu identificador e o token do cliente proprietário.\n\n**Resultado esperado:** HTTP 200 — OK, com informações do pedido, incluindo identificador, itens e status.\n\n**Dependências:** CT-01.1 — Login Cliente e CT-06 — Criar pedido válido.\n\n**Evidência:** CT-07 — Consultar o próprio pedido."
           },
           "response": []
         },
@@ -2410,7 +2421,8 @@
                 "pedidos",
                 "{{pedidoId}}"
               ]
-            }
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se a API impede que um cliente consulte um pedido pertencente a outro usuário.\n\n**Pré-condições:** dois clientes autenticados e pedido previamente criado pelo primeiro cliente.\n\n**Entrada:** GET de consulta ao pedido do primeiro cliente, utilizando o token JWT do segundo cliente.\n\n**Resultado esperado:** acesso negado, sem exposição das informações do pedido. Conferir se o contrato implementado retorna HTTP 403 ou 404.\n\n**Dependências:** CT-01.1, CT-01.2 e CT-06.\n\n**Evidência:** CT-08 — Consultar pedido de outro cliente."
           },
           "response": []
         },
@@ -2460,7 +2472,8 @@
                 "{{pedidoId}}",
                 "pagamentos"
               ]
-            }
+            },
+            "description": "**Tipo:** Negativo — regra de negócio.\n\n**Objetivo:** verificar o comportamento da aplicação quando um pagamento simulado é recusado.\n\n**Pré-condições:** cliente autenticado e pedido existente, apto a receber uma tentativa de pagamento.\n\n**Entrada:** POST de processamento de pagamento, com os dados necessários para simular uma recusa.\n\n**Resultado esperado:** pagamento registrado como recusado, sem confirmação indevida do pedido. Conferir o status HTTP e os campos da resposta conforme a implementação.\n\n**Dependências:** autenticação do cliente e pedido previamente criado ou preparado para esse cenário.\n\n**Evidência:** CT-09 — Processar pagamento recusado."
           },
           "response": []
         },
@@ -2510,7 +2523,8 @@
                 "{{pedidoId}}",
                 "pagamentos"
               ]
-            }
+            },
+            "description": "**Tipo:** Positivo.\n\n**Objetivo:** verificar se a API processa corretamente um pagamento simulado aprovado.\n\n**Pré-condições:** cliente autenticado e pedido existente, ainda não pago.\n\n**Entrada:** POST de processamento de pagamento, utilizando dados que produzam aprovação no simulador.\n\n**Resultado esperado:** processamento bem-sucedido, com pagamento aprovado e atualização do pedido conforme as regras de negócio.\n\n**Dependências:** autenticação e pedido disponível para pagamento.\n\n**Evidência:** CT-10 — Processar pagamento aprovado."
           },
           "response": []
         },
@@ -2560,7 +2574,8 @@
                 "{{pedidoId}}",
                 "pagamentos"
               ]
-            }
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se a API impede o processamento de um novo pagamento para um pedido já pago.\n\n**Pré-condições:** cliente autenticado e pedido com pagamento anteriormente aprovado.\n\n**Entrada:** POST de processamento de pagamento, informando um pedido já pago.\n\n**Resultado esperado:** requisição rejeitada, sem geração de novo pagamento aprovado ou alteração indevida do estado do pedido. Conferir o código HTTP exato.\n\n**Dependências:** CT-10 — Processar pagamento aprovado.\n\n**Evidência:** CT-11 — Pagar pedido já pago."
           },
           "response": []
         },
@@ -2610,7 +2625,8 @@
                 "{{pedidoId}}",
                 "status"
               ]
-            }
+            },
+            "description": "**Tipo:** Positivo.\n\n**Objetivo:** verificar se um funcionário autorizado consegue atualizar o status de um pedido para Em Preparo.\n\n**Pré-condições:** funcionário autenticado, associado à unidade correspondente, e pedido existente em situação que permita essa transição.\n\n**Entrada:** PATCH de atualização de status, informando o identificador do pedido e o novo status Em Preparo.\n\n**Resultado esperado:** requisição bem-sucedida, com atualização do status do pedido para Em Preparo.\n\n**Dependências:** CT-01.3 — Login Funcionário e pedido com pagamento aprovado ou status compatível.\n\n**Evidência:** CT-12 — Alterar pedido para Em Preparo."
           },
           "response": []
         },
@@ -2659,7 +2675,8 @@
                 "usuarios",
                 "funcionarios"
               ]
-            }
+            },
+            "description": "**Tipo:** Positivo.\n\n**Objetivo:** verificar se um administrador consegue cadastrar um usuário com perfil Funcionário.\n\n**Pré-condições:** administrador autenticado, unidade válida e dados cadastrais que não violem restrições de unicidade.\n\n**Entrada:** POST de criação de usuário funcionário, contendo os campos obrigatórios e a unidade associada.\n\n**Resultado esperado:** cadastro realizado com sucesso, retornando a identificação do funcionário criado, conforme o contrato da API.\n\n**Dependências:** CT-01.4 — Login Admin e unidade cadastrada.\n\n**Evidência:** CT-13 — Criar funcionário como Admin."
           },
           "response": []
         },
@@ -2698,7 +2715,8 @@
                 "api",
                 "usuarios"
               ]
-            }
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se um usuário com perfil Cliente é impedido de acessar a listagem administrativa de usuários.\n\n**Pré-condições:** cliente autenticado com token JWT válido.\n\n**Entrada:** GET de listagem de usuários, utilizando o token do cliente.\n\n**Resultado esperado:** HTTP 403 — Forbidden, sem retorno da listagem de usuários.\n\n**Dependências:** CT-01.1 — Login Cliente.\n\n**Evidência:** CT-14 — Cliente tentar listar usuários."
           },
           "response": []
         },
@@ -2746,7 +2764,8 @@
                 "api",
                 "consentimentos"
               ]
-            }
+            },
+            "description": "**Tipo:** Positivo.\n\n**Objetivo:** verificar se um usuário autenticado consegue registrar um consentimento relacionado ao tratamento de seus dados pessoais.\n\n**Pré-condições:** usuário autenticado e dados válidos para registro do consentimento.\n\n**Entrada:** POST de registro de consentimento, contendo as informações exigidas pelo endpoint.\n\n**Resultado esperado:** consentimento registrado com sucesso, com identificação do usuário e informações pertinentes ao registro.\n\n**Dependências:** autenticação do usuário utilizado no cenário.\n\n**Evidência:** CT-15 — Registrar consentimento."
           },
           "response": []
         },
@@ -2785,7 +2804,8 @@
                 "api",
                 "auditorias"
               ]
-            }
+            },
+            "description": "**Tipo:** Positivo.\n\n**Objetivo:** verificar se o administrador consegue consultar os registros de auditoria da aplicação.\n\n**Pré-condições:** administrador autenticado e registros de auditoria existentes no banco.\n\n**Entrada:** GET de listagem de auditorias, utilizando o token do administrador.\n\n**Resultado esperado:** HTTP 200 — OK, com os registros de auditoria disponíveis para consulta.\n\n**Dependências:** CT-01.4 — Login Admin e operações anteriores que tenham gerado registros.\n\n**Evidência:** CT-16 — Listar auditorias como Admin."
           },
           "response": []
         },
@@ -2824,7 +2844,8 @@
                 "api",
                 "auditorias"
               ]
-            }
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se um cliente é impedido de consultar registros administrativos de auditoria.\n\n**Pré-condições:** cliente autenticado com token JWT válido.\n\n**Entrada:** GET de listagem de auditorias, utilizando o token do cliente.\n\n**Resultado esperado:** HTTP 403 — Forbidden, sem exposição dos registros.\n\n**Dependências:** CT-01.1 — Login Cliente.\n\n**Evidência:** CT-17 — Cliente tentar listar auditorias."
           },
           "response": []
         },
@@ -2856,7 +2877,8 @@
                 "api",
                 "auditorias"
               ]
-            }
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se a API exige autenticação para acesso aos registros de auditoria.\n\n**Pré-condições:** API em execução e endpoint de auditoria disponível.\n\n**Entrada:** GET de listagem de auditorias, sem cabeçalho de autorização com token JWT.\n\n**Resultado esperado:** HTTP 401 — Unauthorized, sem retorno dos registros de auditoria.\n\n**Dependências:** nenhuma autenticação.\n\n**Evidência:** CT-18 — Acessar auditorias sem token."
           },
           "response": []
         },
@@ -2904,7 +2926,8 @@
                 "api",
                 "pedidos"
               ]
-            }
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se a API impede a criação de um pedido cuja quantidade solicitada exceda o estoque disponível.\n\n**Pré-condições:** cliente autenticado, unidade válida, produto cadastrado e quantidade solicitada superior à disponibilidade do estoque.\n\n**Entrada:** POST de criação de pedido, com unidade e canal válidos, mas quantidade incompatível com o estoque disponível.\n\n**Resultado esperado:** pedido rejeitado, sem confirmação de uma operação que não possa ser atendida. Conferir o status HTTP e a mensagem de erro implementados.\n\n**Dependências:** CT-01.1 — Login Cliente e dados de estoque conhecidos.\n\n**Evidência:** CT-19 — Criar pedido com estoque insuficiente."
           },
           "response": []
         },
@@ -2957,7 +2980,8 @@
                   "value": "{{pedidoId}}"
                 }
               ]
-            }
+            },
+            "description": "**Tipo:** Positivo.\n\n**Objetivo:** verificar se uma operação relevante realizada anteriormente gerou um registro de auditoria consultável pelo administrador.\n\n**Pré-condições:** administrador autenticado e operação sensível previamente executada com sucesso.\n\n**Entrada:** GET de consulta aos registros de auditoria, utilizando o token administrativo.\n\n**Resultado esperado:** HTTP 200 — OK, com registro correspondente à operação auditada, contendo as informações de rastreabilidade previstas pela aplicação.\n\n**Dependências:** CT-01.4 — Login Admin e execução prévia da operação auditada.\n\n**Evidência:** CT-20 — Validar auditoria após ação sensível."
           },
           "response": []
         },
@@ -2995,7 +3019,8 @@
                 "api",
                 "usuarios"
               ]
-            }
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se a API impede o cadastro de um cliente quando o CPF obrigatório não é informado.\n\n**Pré-condições:** API em execução, banco de dados disponível e endpoint de cadastro de clientes acessível.\n\n**Entrada:** POST de cadastro de cliente, contendo os demais dados obrigatórios válidos, mas sem informar o CPF.\n\n**Resultado esperado:** HTTP 400 — Bad Request, com mensagem de validação indicando a ausência do CPF. O cliente não deve ser cadastrado.\n\n**Dependências:** nenhuma requisição preparatória de autenticação, desde que o endpoint de cadastro seja público.\n\n**Evidência:** CT-21 — Criar cliente sem CPF, na pasta 09 — Cenários de Teste da coleção Postman."
           },
           "response": []
         },
@@ -3033,7 +3058,57 @@
                 "api",
                 "usuarios"
               ]
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se a API rejeita o cadastro de clientes com CPF inválido, impedindo o armazenamento de informações que não atendam às regras de validação implementadas.\n\n**Pré-condições:** API em execução, banco de dados disponível e endpoint de cadastro de clientes acessível.\n\n**Entrada:** POST de cadastro de cliente, contendo os dados obrigatórios válidos e um CPF inválido, conforme as regras de validação da aplicação.\n\n**Resultado esperado:** HTTP 400 — Bad Request, com mensagem de validação relacionada ao CPF informado. O cliente não deve ser cadastrado.\n\n**Dependências:** nenhuma requisição preparatória de autenticação, desde que o endpoint de cadastro seja público.\n\n**Evidência:** CT-22 — Criar cliente com CPF inválido, na pasta 09 — Cenários de Teste da coleção Postman."
+          },
+          "response": []
+        },
+        {
+          "name": "CT-23 Criar pedido em unidade inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CT23 - Criação de pedido inválida retorna 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"CT23 - Pedido não criado\", function () {\r\n    const resposta = pm.response.json();\r\n\r\n    pm.expect(resposta).to.have.property(\"status\");\r\n});\r\n\r\n"
+                ]
+              }
             }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenCliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"clienteId\": 9,\r\n    \"unidadeId\": 99999,\r\n    \"canalPedido\": \"App\",\r\n    \"itens\": [\r\n        {\r\n            \"produtoId\": {{produtoId}},\r\n            \"quantidade\": 1\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ]
+            },
+            "description": "**Tipo:** Negativo.\n\n**Objetivo:** verificar se a API impede a criação de pedidos associados a unidades inexistentes, garantindo a integridade dos dados e o cumprimento das regras de negócio.\n\n**Pré-condições:** API em execução, cliente autenticado com token JWT válido, produto existente e identificador de unidade que não esteja cadastrado no banco de dados.\n\n**Entrada:** POST `/api/pedidos`, contendo os campos obrigatórios para criação de um pedido, incluindo canal do pedido, produto e quantidade válidos, mas informando um `unidadeId` inexistente.\n\n**Resultado esperado:** requisição rejeitada, com código HTTP 404, com respota informando que a unidade não foi encontrada.\n\n**Dependências:** CT-01.1 — PREP-01 — Login Cliente e disponibilidade de um produto válido para a requisição.\n\n**Evidência:** CT-23 — Criar pedido em unidade inexistente, na pasta 09 — Cenários de Teste da coleção Postman."
           },
           "response": []
         }
@@ -3046,12 +3121,10 @@
       "value": "https://localhost:7111"
     },
     {
-      "key": "tokenFuncionario",
-      "secret": true
+      "key": "tokenFuncionario"
     },
     {
-      "key": "tokenAdmin",
-      "secret": true
+      "key": "tokenAdmin"
     },
     {
       "key": "unidadeId",
@@ -3062,8 +3135,7 @@
       "value": ""
     },
     {
-      "key": "tokenCliente2",
-      "secret": true
+      "key": "tokenCliente2"
     },
     {
       "key": "pedidoFuncionarioId",
@@ -3074,8 +3146,7 @@
       "value": "1"
     },
     {
-      "key": "tokenCliente",
-      "secret": true
+      "key": "tokenCliente"
     }
   ]
 }
