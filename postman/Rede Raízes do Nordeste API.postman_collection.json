@@ -657,7 +657,7 @@
                 },
                 {
                   "key": "status",
-                  "value": "Entregue",
+                  "value": "AguardandoPagamento",
                   "disabled": true
                 }
               ]
@@ -1492,7 +1492,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/auditorias?registroId=11",
+              "raw": "{{baseUrl}}/api/auditorias",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -1521,8 +1521,9 @@
                 },
                 {
                   "key": "registroId",
-                  "value": "11",
-                  "description": "filtra pelo ID do registro da entidade relacionada à auditoria"
+                  "value": "{{pedidoId}}",
+                  "description": "filtra pelo ID do registro da entidade relacionada à auditoria",
+                  "disabled": true
                 }
               ]
             }
